@@ -1,0 +1,42 @@
+{
+  "analysis_date": "2025-10-13T20:02:44.191166",
+  "total_signals": 900,
+  "long_signals": 709,
+  "short_signals": 191,
+  "long_wr": 51.48095909732017,
+  "long_best_days": [
+    "Wednesday",
+    "Saturday",
+    "Sunday"
+  ],
+  "long_best_hours": [
+    2,
+    3,
+    1
+  ],
+  "long_best_coins": [
+    "BNB",
+    "FET",
+    "DOGE",
+    "UNI",
+    "AVAX"
+  ],
+  "long_best_months": [
+    "October",
+    "April",
+    "January",
+    "August",
+    "May",
+    "September",
+    "March"
+  ],
+  "long_worst_days": [
+    "Thursday"
+  ],
+  "long_worst_months": [
+    "July"
+  ],
+  "filtered_wr": 82.05128205128204,
+  "filtered_signals": 39,
+  "note": "SHORT signals need re-backtest with corrected logic"
+}
