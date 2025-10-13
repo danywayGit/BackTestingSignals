@@ -187,10 +187,24 @@ config/config.json
 
 # Data files (you might want to track some of these)
 data/signals/*.json
+data/signals/*.csv
 data/market_data/*.csv
 data/market_data/*.parquet
 data/results/*.html
 data/results/*.json
+
+# Cache and intermediate files (should not be tracked)
+data/cache/
+data/analysis/
+data/backtest_results/intermediate_results_*.csv
+data/backtest_results/*_030*.csv
+data/backtest_results/*_030*.json
+data/backtest_results/*_031*.csv
+data/backtest_results/*_031*.json
+data/backtest_results/*_035*.csv
+data/backtest_results/*_035*.json
+data/backtest_results/*_195*.csv
+data/backtest_results/*_195*.json
 
 # Temporary files
 tmp/
