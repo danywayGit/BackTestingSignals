@@ -1,0 +1,23 @@
+# Minimal requirements for Meta Signals Discord extraction
+# Core functionality only
+
+# Discord API
+discord.py>=2.6.0
+
+# Data processing
+pandas>=2.3.0
+numpy>=2.2.0
+
+# HTTP requests
+requests>=2.32.0
+
+# Configuration
+python-dotenv>=1.1.0
+
+# Logging
+loguru>=0.7.0
+
+# Image processing (for Algo version extraction)
+Pillow>=11.0.0
+pytesseract>=0.3.10
+opencv-python>=4.12.0

@@ -181,6 +181,7 @@ logs/
 # API Keys and sensitive data
 config/secrets.json
 config/api_keys.json
+config/config.json
 .env.local
 .env.production
 

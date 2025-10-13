@@ -1,50 +1,76 @@
 # Core data processing
-pandas>=1.5.0
-numpy>=1.21.0
-
-# Telegram API
-telethon>=1.24.0
+pandas>=2.3.0
+numpy>=2.2.0
 
 # Discord API  
-discord.py>=2.0.0
+discord.py>=2.6.0
+aiohttp>=3.13.0
 
-# Market data
-yfinance>=0.1.87
-ccxt>=2.0.0
+# Web requests
+requests>=2.32.0
 
-# Backtesting frameworks
-backtrader>=1.9.76.123
-zipline-reloaded>=2.2.0
-
-# Technical analysis
-ta-lib>=0.4.25
-pandas-ta>=0.3.14b
-
-# Database
-sqlite3
-
-# Visualization
-matplotlib>=3.5.0
-plotly>=5.0.0
-seaborn>=0.11.0
-
-# Web scraping (if needed)
-requests>=2.28.0
-beautifulsoup4>=4.11.0
+# Binance API for historical data
+python-binance>=1.0.29
 
 # Configuration management
-python-dotenv>=0.19.0
-
-# Testing
-pytest>=7.0.0
-pytest-cov>=4.0.0
+python-dotenv>=1.1.0
 
 # Logging
-loguru>=0.6.0
+loguru>=0.7.0
 
-# Data validation
-pydantic>=1.10.0
+# Image processing for Algo version extraction
+Pillow>=11.0.0
+pytesseract>=0.3.10
+opencv-python>=4.12.0
+
+# Additional dependencies (installed automatically with above)
+# aiohappyeyeballs>=2.6.0
+# aiosignal>=1.4.0
+# async-timeout>=5.0.0
+# attrs>=25.0.0
+# certifi>=2025.0.0
+# charset-normalizer>=3.4.0
+# colorama>=0.4.6
+# frozenlist>=1.8.0
+# idna>=3.11.0
+# multidict>=6.7.0
+# packaging>=25.0
+# propcache>=0.4.0
+# python-dateutil>=2.9.0
+# pytz>=2025.0
+# six>=1.17.0
+# typing-extensions>=4.15.0
+# tzdata>=2025.0
+# urllib3>=2.5.0
+# win32-setctime>=1.2.0
+# yarl>=1.22.0
+
+# Optional packages for extended functionality
+# Telegram API (if needed later)
+# telethon>=1.24.0
+
+# Market data (if needed for backtesting)
+# yfinance>=0.1.87
+# ccxt>=2.0.0
+
+# Backtesting frameworks (if needed later)
+# backtrader>=1.9.76.123
+
+# Technical analysis (if needed later)
+# pandas-ta>=0.3.14b
+
+# Visualization (if needed later)
+# matplotlib>=3.5.0
+# plotly>=5.0.0
+# seaborn>=0.11.0
+
+# Testing (for development)
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
+
+# Data validation (if needed later)
+# pydantic>=1.10.0
 
 # Jupyter (for analysis notebooks)
-jupyter>=1.0.0
-ipykernel>=6.0.0
+# jupyter>=1.0.0
+# ipykernel>=6.0.0

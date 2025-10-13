@@ -12,13 +12,13 @@
     ]
   },
   "discord": {
-    "token": "YOUR_BOT_TOKEN",
+    "token": "YOUR_BOT_TOKEN_OR_USER_TOKEN",
     "servers": [
       {
-        "name": "server_name",
-        "server_id": "SERVER_ID",
-        "channels": ["channel1", "channel2"],
-        "description": "Description of the signal provider"
+        "name": "Meta Signals",
+        "server_id": "SERVER_ID_OPTIONAL",
+        "channels": ["Free Alerts"],
+        "description": "Meta Signals Free Alerts channel"
       }
     ]
   },
@@ -33,5 +33,10 @@
     "market_data_provider": "yahoo",
     "timeframes": ["1m", "5m", "15m", "1h", "4h", "1d"],
     "symbols": ["BTCUSDT", "ETHUSDT", "ADAUSDT"]
+  },
+  "image_processing": {
+    "tesseract_path": "AUTO",
+    "download_images": true,
+    "image_formats": [".png", ".jpg", ".jpeg", ".gif", ".webp"]
   }
 }
