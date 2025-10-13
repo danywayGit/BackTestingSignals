@@ -90,9 +90,22 @@ class DiscordMetaSignalsParser(SignalParser):
             # Extract stop loss
             sl_match = re.search(self.patterns['stop_loss'], message)
             
-            # Determine direction (📈 = LONG, 📉 = SHORT)
+            # Determine position type based on entry vs target comparison
+            # CRITICAL: If entry > target1, it's SHORT (sell high, buy low)
+            #           If entry < target1, it's LONG (buy low, sell high)
+            target1_price = float(target1_match.group(1).replace(',', '')) if target1_match else None
+            
+            if target1_price:
+                if entry_price > target1_price:
+                    action = 'SHORT'  # Entry above target means shorting
+                else:
+                    action = 'LONG'   # Entry below target means long
+            else:
+                # Fallback to emoji if no target available (should rarely happen)
+                action = 'LONG' if '📈' in original_message else ('SHORT' if '📉' in original_message else 'UNKNOWN')
+            
+            # Keep track of signal direction emoji for reference
             direction_match = re.search(self.patterns['direction'], original_message)
-            action = 'LONG' if '📈' in original_message else ('SHORT' if '📉' in original_message else 'UNKNOWN')
             
             # Build additional info dictionary
             additional_info = {
