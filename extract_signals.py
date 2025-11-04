@@ -90,18 +90,18 @@ async def main():
     
     # Configuration options
     print("\n⚙️  Extraction Configuration:")
-    channel_name = input("Enter channel name (default: 'Free Alerts'): ").strip()
+    channel_name = input("Enter channel name (default: 'limited-free-alerts'): ").strip()
     if not channel_name:
-        channel_name = "Free Alerts"
+        channel_name = "limited-free-alerts"  # Updated default channel name
     
-    message_limit = input("Enter message limit (default: 500): ").strip()
+    message_limit = input("Enter message limit (default: 1000): ").strip()
     if not message_limit:
-        message_limit = 500
+        message_limit = 1000  # Increased default to get all signals since Oct 12
     else:
         try:
             message_limit = int(message_limit)
         except ValueError:
-            message_limit = 500
+            message_limit = 1000
     
     print(f"Channel: {channel_name}")
     print(f"Message limit: {message_limit}")

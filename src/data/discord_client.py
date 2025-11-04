@@ -3,6 +3,7 @@ Discord Bot Client for Meta Signals
 
 This module provides a Discord bot client to connect to the Meta Signals server
 and extract historical signals from the Free Alerts channel.
+Includes fallback to web API if discord.py library fails.
 """
 
 import discord
@@ -15,6 +16,7 @@ from datetime import datetime
 import logging
 from ..parsers.discord_parser import DiscordMetaSignalsParser
 from ..parsers.base_parser import Signal
+from .discord_web_client import DiscordWebClient
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -254,10 +256,90 @@ class MetaSignalsBot:
             logger.error(f"Error connecting to Discord: {e}")
             return []
     
+    def extract_with_web_client(self, channel_name: str = "Free Alerts", 
+                                limit: int = 1000) -> List[Dict[str, Any]]:
+        """
+        Extract signals using direct web API (fallback method)
+        
+        Args:
+            channel_name: Name of the channel to extract from
+            limit: Maximum number of messages to fetch
+            
+        Returns:
+            List of message data with parsed signals
+        """
+        token = self.config.get('discord', {}).get('token')
+        
+        logger.info("🌐 Using web API fallback method...")
+        web_client = DiscordWebClient(token)
+        
+        # Test connection
+        if not web_client.test_connection():
+            logger.error("Web client connection failed!")
+            return []
+        
+        # Find Meta Signals server
+        logger.info("🔍 Looking for Meta Signals server...")
+        guild = web_client.find_guild_by_name("Meta Signals")
+        if not guild:
+            logger.error("Could not find Meta Signals server!")
+            logger.info("Available servers:")
+            for g in web_client.get_guilds():
+                logger.info(f"  - {g['name']}")
+            return []
+        
+        logger.info(f"✅ Found server: {guild['name']}")
+        
+        # Find channel
+        logger.info(f"🔍 Looking for '{channel_name}' channel...")
+        channel = web_client.find_channel_by_name(guild['id'], channel_name)
+        if not channel:
+            logger.error(f"Could not find '{channel_name}' channel!")
+            logger.info("Available channels:")
+            all_channels = web_client.get_guild_channels(guild['id'])
+            for ch in all_channels:
+                if ch.get('type') == 0:  # Text channel
+                    logger.info(f"  - {ch.get('name')} (ID: {ch.get('id')})")
+            return []
+        
+        logger.info(f"✅ Found channel: {channel['name']}")
+        
+        # Fetch messages
+        logger.info(f"📥 Fetching up to {limit} messages...")
+        raw_messages = web_client.get_messages_bulk(channel['id'], limit)
+        logger.info(f"✅ Fetched {len(raw_messages)} messages")
+        
+        # Parse messages for signals
+        messages_data = []
+        for raw_msg in raw_messages:
+            formatted_msg = web_client.format_message_for_parser(raw_msg)
+            
+            # Parse signals from content
+            signals = self.parser.parse_message(
+                formatted_msg['content'],
+                message_id=formatted_msg['message_id'],
+                timestamp=formatted_msg['timestamp'],
+                attachments=formatted_msg['attachments']
+            )
+            
+            # Add parsed data
+            formatted_msg['signals'] = signals
+            formatted_msg['channel_name'] = channel['name']
+            formatted_msg['guild_name'] = guild['name']
+            
+            messages_data.append(formatted_msg)
+            
+            if signals:
+                for signal in signals:
+                    logger.info(f"Found signal: {signal.symbol} - {signal.action} @ {signal.entry_price}")
+        
+        return messages_data
+    
     async def run_signal_extraction(self, channel_name: str = "Free Alerts", 
                                    limit: int = 1000):
         """
         Main method to run signal extraction
+        Tries discord.py first, falls back to web API if that fails
         
         Args:
             channel_name: Name of the channel to extract from
@@ -286,15 +368,18 @@ class MetaSignalsBot:
                 await self.client.close()
                 return []
         
-        # Run the client
+        # Try discord.py library first
         try:
+            logger.info("📡 Attempting connection with discord.py library...")
             await self.client.start(token)
         except discord.LoginFailure:
-            logger.error("Invalid Discord token!")
-            return []
+            logger.warning("discord.py login failed, trying web API fallback...")
+            # Use web client fallback
+            return self.extract_with_web_client(channel_name, limit)
         except Exception as e:
-            logger.error(f"Error running Discord client: {e}")
-            return []
+            logger.warning(f"discord.py error: {e}, trying web API fallback...")
+            # Use web client fallback
+            return self.extract_with_web_client(channel_name, limit)
 
 
 async def main():

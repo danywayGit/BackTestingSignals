@@ -103,7 +103,8 @@ class BinanceDataFetcher:
         Returns:
             Dictionary with outcome analysis
         """
-        symbol = signal['symbol'] + 'USDT'
+        # Only add USDT if not already present
+        symbol = signal['symbol'] if signal['symbol'].endswith('USDT') else signal['symbol'] + 'USDT'
         entry_price = float(signal['entry_price'])
         stop_loss = float(signal['stop_loss']) if signal['stop_loss'] else None
         target1 = float(signal['target1']) if signal['target1'] else None

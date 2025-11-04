@@ -1,17 +1,185 @@
-"""
-Quick Meta Signals Extraction
+""""""
 
-Direct extraction script that works with your token.
-"""
+Quick Meta Signals Extraction using Web API fallbackQuick Meta Signals Extraction using Web API fallback
 
-import requests
-import json
-import re
-from datetime import datetime
-import csv
-import os
 
-def extract_meta_signals():
+
+Direct extraction script that works with your token.Direct extraction script that works with your token.
+
+""""""
+
+
+
+import sysimport sys
+
+import osimport os
+
+import asyncioimport asyncio
+
+
+
+# Add src to path# Add src to path
+
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+
+
+
+from src.data.discord_client import MetaSignalsBotfrom src.data.discord_client import MetaSignalsBot
+
+from src.data.storage import SignalStoragefrom src.data.storage import SignalStorage
+
+
+
+async def extract_meta_signals():async def extract_meta_signals():
+
+    """Extract Meta Signals using web API fallback"""    """Extract Meta Signals using web API fallback"""
+
+        
+
+    print("🚀 Quick Meta Signals Extraction")    print("🚀 Quick Meta Signals Extraction")
+
+    print("=" * 60)    print("=" * 60)
+
+        
+
+    bot = MetaSignalsBot()    bot = MetaSignalsBot()
+
+    storage = SignalStorage()    storage = SignalStorage()
+
+        
+
+    # Extract using the correct channel name    # Extract using the correct channel name
+
+    print("📡 Extracting from 'limited-free-alerts' channel...")    print("📡 Extracting from 'limited-free-alerts' channel...")
+
+    messages_data = await bot.run_signal_extraction(    messages_data = await bot.run_signal_extraction(
+
+        channel_name="limited-free-alerts",  # Correct channel name        channel_name="limited-free-alerts",  # Correct channel name
+
+        limit=500  # Get last 500 messages        limit=500  # Get last 500 messages
+
+    )    )
+
+        
+
+    if messages_data:    if messages_data:
+
+        print(f"\n✅ Extraction successful!")        print(f"\n✅ Extraction successful!")
+
+        print(f"📊 Extracted {len(messages_data)} messages")        print(f"📊 Extracted {len(messages_data)} messages")
+
+                
+
+        # Count signals        # Count signals
+
+        total_signals = sum(len(msg.get('signals', [])) for msg in messages_data)        total_signals = sum(len(msg.get('signals', [])) for msg in messages_data)
+
+        print(f"🎯 Found {total_signals} trading signals")        print(f"🎯 Found {total_signals} trading signals")
+
+                
+
+        if total_signals > 0:        if total_signals > 0:
+
+            # Store in database            # Store in database
+
+            print("\n💾 Storing signals in database...")            print("\n💾 Storing signals in database...")
+
+            stored_count = storage.store_signals(messages_data)            stored_count = storage.store_signals(messages_data)
+
+            print(f"✅ Stored {stored_count} signals")            print(f"✅ Stored {stored_count} signals")
+
+                        
+
+            # Export to CSV            # Export to CSV
+
+            csv_file = storage.export_to_csv()            csv_file = storage.export_to_csv()
+
+            print(f"✅ Exported to CSV: {csv_file}")            print(f"✅ Exported to CSV: {csv_file}")
+
+                        
+
+            # Show summary            # Show summary
+
+            summary = storage.get_signals_summary()            summary = storage.get_signals_summary()
+
+            print(f"\n📈 Signal Summary:")            print(f"\n📈 Signal Summary:")
+
+            print(f"Total signals: {summary['total_signals']}")            print(f"Total signals: {summary['total_signals']}")
+
+            print(f"Date range: {summary['date_range']['earliest']} to {summary['date_range']['latest']}")            print(f"Date range: {summary['date_range']['earliest']} to {summary['date_range']['latest']}")
+
+                        
+
+            print(f"\n📊 Top Symbols:")            print(f"\n📊 Top Symbols:")
+
+            for symbol, count in list(summary['top_symbols'].items())[:10]:            for symbol, count in list(summary['top_symbols'].items())[:10]:
+
+                print(f"  {symbol}: {count}")                print(f"  {symbol}: {count}")
+
+                        
+
+            print(f"\n🎯 Actions:")            print(f"\n🎯 Actions:")
+
+            for action, count in summary['action_counts'].items():            for action, count in summary['action_counts'].items():
+
+                print(f"  {action}: {count}")                print(f"  {action}: {count}")
+
+                        
+
+            # Show sample signals            # Show sample signals
+
+            print(f"\n🎯 Sample Signals:")            print(f"\n🎯 Sample Signals:")
+
+            sample_signals = storage.search_signals(limit=5)            sample_signals = storage.search_signals(limit=5)
+
+            for i, signal in enumerate(sample_signals, 1):            for i, signal in enumerate(sample_signals, 1):
+
+                print(f"\n{i}. {signal['symbol']} - {signal['action']} @ ${signal['entry_price']}")                print(f"\n{i}. {signal['symbol']} - {signal['action']} @ ${signal['entry_price']}")
+
+                if signal['target1']:                if signal['target1']:
+
+                    targets = [f"${signal['target1']}"]                    targets = [f"${signal['target1']}"]
+
+                    if signal['target2']:                    if signal['target2']:
+
+                        targets.append(f"${signal['target2']}")                        targets.append(f"${signal['target2']}")
+
+                    if signal['target3']:                    if signal['target3']:
+
+                        targets.append(f"${signal['target3']}")                        targets.append(f"${signal['target3']}")
+
+                    print(f"   Targets: {', '.join(targets)}")                    print(f"   Targets: {', '.join(targets)}")
+
+                if signal['stop_loss']:                if signal['stop_loss']:
+
+                    print(f"   Stop Loss: ${signal['stop_loss']}")                    print(f"   Stop Loss: ${signal['stop_loss']}")
+
+                if signal['timeframe']:                if signal['timeframe']:
+
+                    print(f"   Timeframe: {signal['timeframe']}")                    print(f"   Timeframe: {signal['timeframe']}")
+
+                        
+
+            print(f"\n🎉 Extraction complete!")            print(f"\n🎉 Extraction complete!")
+
+            print(f"📁 Database: data/signals/signals.db")            print(f"📁 Database: data/signals/signals.db")
+
+            print(f"📄 CSV: {csv_file}")            print(f"📄 CSV: {csv_file}")
+
+        else:        else:
+
+            print("\n⚠️  No signals found in messages")            print("\n⚠️  No signals found in messages")
+
+    else:    else:
+
+        print("\n❌ No messages extracted")        print("\n❌ No messages extracted")
+
+
+
+if __name__ == "__main__":if __name__ == "__main__":
+
+    asyncio.run(extract_meta_signals())    asyncio.run(extract_meta_signals())
+
     """Extract Meta Signals using direct API calls"""
     
     print("🚀 Quick Meta Signals Extraction")

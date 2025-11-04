@@ -1,0 +1,839 @@
+{
+  "total_signals": 100,
+  "valid_signals": 100,
+  "data_coverage_pct": 100.0,
+  "overall_winrate_pct": 51.0,
+  "target1_hit_rate_pct": 51.0,
+  "target2_hit_rate_pct": 0.0,
+  "target3_hit_rate_pct": 0.0,
+  "stop_loss_rate_pct": 49.0,
+  "total_wins": 51,
+  "total_losses": 49,
+  "target1_only_wins": 51,
+  "target2_wins": 0,
+  "target3_wins": 0,
+  "target1_hits": 51,
+  "target2_hits": 0,
+  "target3_hits": 0,
+  "avg_target_time_min": 318.3223552287581,
+  "median_target_time_min": 148.96933333333334,
+  "avg_target1_time_min": 318.3223552287581,
+  "avg_target2_time_min": 0,
+  "avg_target3_time_min": 0,
+  "avg_sl_time_min": 284.82072857142856,
+  "median_sl_time_min": 90.90058333333333,
+  "fastest_target_min": 2.9767333333333337,
+  "slowest_target_min": 3602.8394,
+  "avg_max_profit_pct": 0.9964829173442012,
+  "median_max_profit_pct": 0.7690267833465902,
+  "best_profit_pct": 3.9859211460681028,
+  "avg_max_drawdown_pct": 0.7502995099488287,
+  "median_max_drawdown_pct": 0.5821550849632144,
+  "worst_drawdown_pct": 3.00300300300301,
+  "profit_factor": 1.4387896381937428,
+  "sharpe_estimate": 1.1282662233277707,
+  "symbol_performance": {
+    "ETH": {
+      "total": 8,
+      "wins": 5,
+      "losses": 3,
+      "profits": [
+        3.104372263250768,
+        3.0205691003482906,
+        1.319991974891552,
+        0.6797006086147683,
+        0.020113080206506484,
+        1.5006790345866694,
+        0.8973707707766032,
+        1.6997255489021996
+      ],
+      "drawdowns": [
+        0.8284425854519326,
+        0.2810015114674392,
+        1.9691494538083596,
+        0.1130911029613629,
+        0.04715399915077374,
+        1.1789249836855318,
+        0.9982970095846286,
+        1.7144282862845746
+      ],
+      "target_times": [
+        403.5269666666666,
+        522.0243166666667,
+        154.2005166666667,
+        203.84793333333334,
+        1583.0237833333333
+      ],
+      "winrate_pct": 62.5,
+      "avg_profit_pct": 1.5303152976971697,
+      "avg_drawdown_pct": 0.8913111165493254,
+      "avg_target_time_min": 573.3247033333333
+    },
+    "BTC": {
+      "total": 8,
+      "wins": 4,
+      "losses": 4,
+      "profits": [
+        2.0831748367185865,
+        0.5853805467337468,
+        0.12884640740499176,
+        1.2397740631055953,
+        0.7741400885822741,
+        0.45555840766836886,
+        0.21103128567639046,
+        0.06411111322803642
+      ],
+      "drawdowns": [
+        0.29079344003445473,
+        1.4954058254187004,
+        0.1689937200199997,
+        0.008704371992886316,
+        0.4898249921717082,
+        0.5554622183501665
+      ],
+      "target_times": [
+        479.5423166666667,
+        15.191650000000001,
+        523.0195833333333,
+        79.10655
+      ],
+      "winrate_pct": 50.0,
+      "avg_profit_pct": 0.6927520936397488,
+      "avg_drawdown_pct": 0.5015307613313192,
+      "avg_target_time_min": 274.215025
+    },
+    "ADA": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "profits": [
+        1.963209151337136,
+        0.7746219107340431,
+        0.6567745074191146
+      ],
+      "drawdowns": [
+        0.8038336682640257,
+        0.23361613180868224,
+        0.23108732668450654
+      ],
+      "target_times": [
+        305.0044833333333,
+        54.84498333333333
+      ],
+      "winrate_pct": 66.66666666666666,
+      "avg_profit_pct": 1.131535189830098,
+      "avg_drawdown_pct": 0.42284570891907153,
+      "avg_target_time_min": 179.92473333333334
+    },
+    "XRP": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        2.9975368429841622
+      ],
+      "drawdowns": [
+        0.21709180478438253
+      ],
+      "target_times": [
+        259.7398
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 2.9975368429841622,
+      "avg_drawdown_pct": 0.21709180478438253,
+      "avg_target_time_min": 259.7398
+    },
+    "XLM": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        3.9859211460681028
+      ],
+      "drawdowns": [
+        0.9231529222884289
+      ],
+      "target_times": [
+        287.75068333333337
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 3.9859211460681028,
+      "avg_drawdown_pct": 0.9231529222884289,
+      "avg_target_time_min": 287.75068333333337
+    },
+    "AAVE": {
+      "total": 3,
+      "wins": 3,
+      "losses": 0,
+      "profits": [
+        2.056781225279075,
+        0.8915605687075702,
+        1.8643490115882848
+      ],
+      "drawdowns": [
+        0.10131370098950099,
+        0.41240627130196994
+      ],
+      "target_times": [
+        39.761700000000005,
+        248.87785,
+        85.67768333333333
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 1.6042302685249765,
+      "avg_drawdown_pct": 0.25685998614573546,
+      "avg_target_time_min": 124.77241111111111
+    },
+    "ZEC": {
+      "total": 5,
+      "wins": 1,
+      "losses": 4,
+      "profits": [
+        0.30821390044691455,
+        1.9083674573128322,
+        0.49514755397108334
+      ],
+      "drawdowns": [
+        1.3330994562357446,
+        0.5779010633379565,
+        1.0275824770146122,
+        1.4021984216459842,
+        0.6535947712418407
+      ],
+      "target_times": [
+        40.30946666666667
+      ],
+      "winrate_pct": 20.0,
+      "avg_profit_pct": 0.9039096372436101,
+      "avg_drawdown_pct": 0.9988752378952277,
+      "avg_target_time_min": 40.30946666666667
+    },
+    "IMX": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "profits": [
+        0.6445941986522226,
+        1.075585678503033,
+        2.2840119165839132
+      ],
+      "drawdowns": [
+        0.5273952534427098,
+        0.2504788566376785,
+        1.4044545325578126
+      ],
+      "target_times": [
+        212.2985666666667,
+        101.89251666666668
+      ],
+      "winrate_pct": 66.66666666666666,
+      "avg_profit_pct": 1.3347305979130564,
+      "avg_drawdown_pct": 0.7274428808794003,
+      "avg_target_time_min": 157.0955416666667
+    },
+    "BNB": {
+      "total": 3,
+      "wins": 3,
+      "losses": 0,
+      "profits": [
+        0.9009807634965842,
+        1.3610132812831546,
+        0.9429762434740313
+      ],
+      "drawdowns": [
+        0.34733694907604706,
+        0.4128050507912138
+      ],
+      "target_times": [
+        145.32011666666668,
+        55.7798,
+        39.85465
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 1.0683234294179234,
+      "avg_drawdown_pct": 0.38007099993363047,
+      "avg_target_time_min": 80.31818888888888
+    },
+    "APT": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        1.0560165151455072
+      ],
+      "drawdowns": [],
+      "target_times": [
+        72.31
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 1.0560165151455072,
+      "avg_drawdown_pct": 0,
+      "avg_target_time_min": 72.31
+    },
+    "BCH": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "profits": [
+        0.6830955469087844,
+        2.306883770676205,
+        0.2796713861213114,
+        0.524067027171371
+      ],
+      "drawdowns": [
+        0.38910505836575876,
+        1.196776632429145,
+        0.8952814265795837,
+        0.5768222338752085,
+        1.528806996461708
+      ],
+      "target_times": [
+        297.07189999999997,
+        3602.8394
+      ],
+      "winrate_pct": 40.0,
+      "avg_profit_pct": 0.9484294327194179,
+      "avg_drawdown_pct": 0.9173584695422807,
+      "avg_target_time_min": 1949.9556499999999
+    },
+    "DASH": {
+      "total": 5,
+      "wins": 2,
+      "losses": 3,
+      "profits": [
+        1.7247326664367024,
+        3.2258064516129163,
+        0.9642301710731019,
+        0.14836795252226082,
+        0.23752969121140477
+      ],
+      "drawdowns": [
+        0.5864091065884725,
+        0.09216589861749319,
+        0.3461918892185969,
+        1.425178147268412
+      ],
+      "target_times": [
+        61.806216666666664,
+        60.184783333333336
+      ],
+      "winrate_pct": 40.0,
+      "avg_profit_pct": 1.2601333865712774,
+      "avg_drawdown_pct": 0.6124862604232436,
+      "avg_target_time_min": 60.9955
+    },
+    "TRX": {
+      "total": 2,
+      "wins": 1,
+      "losses": 1,
+      "profits": [
+        1.4432499851517584,
+        0.49573201138131023
+      ],
+      "drawdowns": [
+        0.07127160420501351,
+        0.5602651726261967
+      ],
+      "target_times": [
+        860.2390166666667
+      ],
+      "winrate_pct": 50.0,
+      "avg_profit_pct": 0.9694909982665343,
+      "avg_drawdown_pct": 0.3157683884156051,
+      "avg_target_time_min": 860.2390166666667
+    },
+    "SUI": {
+      "total": 4,
+      "wins": 1,
+      "losses": 3,
+      "profits": [
+        0.5505274687265908,
+        0.49985763548356604,
+        1.523204370676086,
+        0.5803571428571517
+      ],
+      "drawdowns": [
+        1.1788781921946077,
+        0.5378215065329465,
+        1.1401763710324002,
+        0.18452380952380243
+      ],
+      "target_times": [
+        148.96933333333334
+      ],
+      "winrate_pct": 25.0,
+      "avg_profit_pct": 0.7884866544358486,
+      "avg_drawdown_pct": 0.7603499698209393,
+      "avg_target_time_min": 148.96933333333334
+    },
+    "XTZ": {
+      "total": 4,
+      "wins": 1,
+      "losses": 3,
+      "profits": [
+        0.715287517531556,
+        0.9222661396574449,
+        0.23166023166023472
+      ],
+      "drawdowns": [
+        1.6830294530154295,
+        0.14184397163120582,
+        0.17127799736494964,
+        0.6048906048906096
+      ],
+      "target_times": [
+        92.16846666666667
+      ],
+      "winrate_pct": 25.0,
+      "avg_profit_pct": 0.6230712962830786,
+      "avg_drawdown_pct": 0.6502605067255487,
+      "avg_target_time_min": 92.16846666666667
+    },
+    "DOGE": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "profits": [
+        1.1972427137501402,
+        0.6878548046243826,
+        0.9473552997880934
+      ],
+      "drawdowns": [
+        0.552263474019434,
+        1.2182488708407566,
+        0.40304150912037173
+      ],
+      "target_times": [
+        478.32581666666664,
+        148.98063333333332
+      ],
+      "winrate_pct": 66.66666666666666,
+      "avg_profit_pct": 0.9441509393875388,
+      "avg_drawdown_pct": 0.7245179513268541,
+      "avg_target_time_min": 313.65322499999996
+    },
+    "NEO": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.7079646017699193
+      ],
+      "drawdowns": [
+        1.2711182622687005
+      ],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.7079646017699193,
+      "avg_drawdown_pct": 1.2711182622687005,
+      "avg_target_time_min": 0
+    },
+    "ICP": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.15303891560998167
+      ],
+      "drawdowns": [],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.15303891560998167,
+      "avg_drawdown_pct": 0,
+      "avg_target_time_min": 0
+    },
+    "BAT": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.19493177387913888
+      ],
+      "drawdowns": [],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.19493177387913888,
+      "avg_drawdown_pct": 0,
+      "avg_target_time_min": 0
+    },
+    "BAND": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.23074704355349507
+      ],
+      "drawdowns": [],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.23074704355349507,
+      "avg_drawdown_pct": 0,
+      "avg_target_time_min": 0
+    },
+    "UNI": {
+      "total": 2,
+      "wins": 1,
+      "losses": 1,
+      "profits": [
+        0.7690267833465902
+      ],
+      "drawdowns": [
+        0.1569290197971982,
+        0.05303632988596605
+      ],
+      "target_times": [
+        32.88426666666667
+      ],
+      "winrate_pct": 50.0,
+      "avg_profit_pct": 0.7690267833465902,
+      "avg_drawdown_pct": 0.10498267484158212,
+      "avg_target_time_min": 32.88426666666667
+    },
+    "QTUM": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.3113879003558573
+      ],
+      "drawdowns": [],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.3113879003558573,
+      "avg_drawdown_pct": 0,
+      "avg_target_time_min": 0
+    },
+    "ETC": {
+      "total": 2,
+      "wins": 0,
+      "losses": 2,
+      "profits": [
+        0.4213839671015991,
+        0.3503503503503518
+      ],
+      "drawdowns": [
+        3.00300300300301
+      ],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.38586715872597543,
+      "avg_drawdown_pct": 3.00300300300301,
+      "avg_target_time_min": 0
+    },
+    "SAND": {
+      "total": 4,
+      "wins": 2,
+      "losses": 2,
+      "profits": [
+        0.6886900158361812,
+        0.5811057612485571,
+        0.4473363155754331
+      ],
+      "drawdowns": [
+        0.1276776847779726,
+        0.2688469045777661,
+        1.179341195607965
+      ],
+      "target_times": [
+        150.95919999999998,
+        4.9655000000000005
+      ],
+      "winrate_pct": 50.0,
+      "avg_profit_pct": 0.572377364220057,
+      "avg_drawdown_pct": 0.5252885949879013,
+      "avg_target_time_min": 77.96234999999999
+    },
+    "LTC": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.38782564707865586
+      ],
+      "drawdowns": [],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.38782564707865586,
+      "avg_drawdown_pct": 0,
+      "avg_target_time_min": 0
+    },
+    "AVAX": {
+      "total": 3,
+      "wins": 2,
+      "losses": 1,
+      "profits": [
+        1.1998850409541717,
+        0.14875177855387198,
+        1.5693537381811111
+      ],
+      "drawdowns": [
+        0.41672654116970714,
+        0.9507178890182398,
+        0.6725801735061921
+      ],
+      "target_times": [
+        32.226933333333335,
+        122.292
+      ],
+      "winrate_pct": 66.66666666666666,
+      "avg_profit_pct": 0.9726635192297183,
+      "avg_drawdown_pct": 0.6800082012313796,
+      "avg_target_time_min": 77.25946666666667
+    },
+    "DOT": {
+      "total": 6,
+      "wins": 4,
+      "losses": 2,
+      "profits": [
+        0.8010335917312582,
+        0.5683109797681372,
+        0.29485144023587895,
+        0.67649190625754,
+        1.5670202507232496
+      ],
+      "drawdowns": [
+        0.6718346253230038,
+        1.4969380811975468,
+        2.4363233665559125,
+        0.26576467745832616,
+        0.4821600771456021
+      ],
+      "target_times": [
+        65.14933333333333,
+        2.9767333333333337,
+        33.0662,
+        483.69258333333335
+      ],
+      "winrate_pct": 66.66666666666666,
+      "avg_profit_pct": 0.7815416337432127,
+      "avg_drawdown_pct": 1.0706041655360783,
+      "avg_target_time_min": 146.2212125
+    },
+    "ALGO": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        0.5833738454059342
+      ],
+      "drawdowns": [
+        0.09722897423432461
+      ],
+      "target_times": [
+        13.915083333333333
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 0.5833738454059342,
+      "avg_drawdown_pct": 0.09722897423432461,
+      "avg_target_time_min": 13.915083333333333
+    },
+    "ARB": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        1.5203531142716977
+      ],
+      "drawdowns": [
+        0.22069641981363708
+      ],
+      "target_times": [
+        50.00941666666667
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 1.5203531142716977,
+      "avg_drawdown_pct": 0.22069641981363708,
+      "avg_target_time_min": 50.00941666666667
+    },
+    "SOL": {
+      "total": 3,
+      "wins": 1,
+      "losses": 2,
+      "profits": [
+        1.2993171471927205,
+        0.9391383633462513,
+        0.5811240721102883
+      ],
+      "drawdowns": [
+        0.36039453717753744,
+        1.0303168452245228,
+        1.2852598091198308
+      ],
+      "target_times": [
+        262.91676666666666
+      ],
+      "winrate_pct": 33.33333333333333,
+      "avg_profit_pct": 0.9398598608830868,
+      "avg_drawdown_pct": 0.8919903971739638,
+      "avg_target_time_min": 262.91676666666666
+    },
+    "INJ": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        0.8729388942774049
+      ],
+      "drawdowns": [
+        0.5011315874555399
+      ],
+      "target_times": [
+        307.989
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 0.8729388942774049,
+      "avg_drawdown_pct": 0.5011315874555399,
+      "avg_target_time_min": 307.989
+    },
+    "ATOM": {
+      "total": 4,
+      "wins": 2,
+      "losses": 2,
+      "profits": [
+        0.3366193796585774,
+        0.44752741105391747,
+        1.7490161783996518,
+        0.13401831583648288
+      ],
+      "drawdowns": [
+        1.3464775186342883,
+        0.41539134236991976,
+        0.6030824212642424
+      ],
+      "target_times": [
+        4.9895000000000005,
+        1149.7457166666668
+      ],
+      "winrate_pct": 50.0,
+      "avg_profit_pct": 0.6667953212371575,
+      "avg_drawdown_pct": 0.7883170940894835,
+      "avg_target_time_min": 577.3676083333334
+    },
+    "DYDX": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [],
+      "drawdowns": [
+        0.7836990595611292
+      ],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0,
+      "avg_drawdown_pct": 0.7836990595611292,
+      "avg_target_time_min": 0
+    },
+    "FET": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [],
+      "drawdowns": [
+        1.255358236374768
+      ],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0,
+      "avg_drawdown_pct": 1.255358236374768,
+      "avg_target_time_min": 0
+    },
+    "RUNE": {
+      "total": 1,
+      "wins": 0,
+      "losses": 1,
+      "profits": [
+        0.22883295194508876
+      ],
+      "drawdowns": [
+        0.7627765064836011
+      ],
+      "target_times": [],
+      "winrate_pct": 0.0,
+      "avg_profit_pct": 0.22883295194508876,
+      "avg_drawdown_pct": 0.7627765064836011,
+      "avg_target_time_min": 0
+    },
+    "LINK": {
+      "total": 2,
+      "wins": 2,
+      "losses": 0,
+      "profits": [
+        1.8009004502251216,
+        0.7149646650411284
+      ],
+      "drawdowns": [
+        1.2839753209938294
+      ],
+      "target_times": [
+        555.8403833333334,
+        33.26368333333333
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 1.257932557633125,
+      "avg_drawdown_pct": 1.2839753209938294,
+      "avg_target_time_min": 294.5520333333334
+    },
+    "MINA": {
+      "total": 1,
+      "wins": 1,
+      "losses": 0,
+      "profits": [
+        1.709873138444578
+      ],
+      "drawdowns": [
+        0.9376723662437834
+      ],
+      "target_times": [
+        672.0258166666666
+      ],
+      "winrate_pct": 100.0,
+      "avg_profit_pct": 1.709873138444578,
+      "avg_drawdown_pct": 0.9376723662437834,
+      "avg_target_time_min": 672.0258166666666
+    },
+    "STORJ": {
+      "total": 2,
+      "wins": 1,
+      "losses": 1,
+      "profits": [
+        1.0248324793062638,
+        0.8264462809917319
+      ],
+      "drawdowns": [
+        0.9854158454867965,
+        1.219992129083035
+      ],
+      "target_times": [
+        592.0405166666666
+      ],
+      "winrate_pct": 50.0,
+      "avg_profit_pct": 0.9256393801489978,
+      "avg_drawdown_pct": 1.1027039872849156,
+      "avg_target_time_min": 592.0405166666666
+    }
+  },
+  "timeframe_performance": {
+    "Unknown": {
+      "total": 100,
+      "wins": 51,
+      "losses": 49,
+      "winrate_pct": 51.0
+    }
+  },
+  "strategy_performance": {
+    "Unknown": {
+      "total": 100,
+      "wins": 51,
+      "losses": 49,
+      "winrate_pct": 51.0
+    }
+  },
+  "action_performance": {
+    "LONG": {
+      "total": 100,
+      "wins": 51,
+      "losses": 49,
+      "winrate_pct": 51.0
+    }
+  }
+}

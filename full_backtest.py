@@ -444,8 +444,14 @@ def main():
     print("This will test ALL signals against historical Binance data")
     print()
     
+    # Check for command line argument for signals file
+    signals_file = sys.argv[1] if len(sys.argv) > 1 else None
+    if signals_file:
+        print(f"📂 Using signal file: {signals_file}")
+        backtester.load_signals(signals_file)
+    
     # Ask user for test size
-    response = input("Test all 989 signals? (y/n) or enter number: ").strip().lower()
+    response = input(f"Test all {len(backtester.signals_df) if backtester.signals_df is not None else 989} signals? (y/n) or enter number: ").strip().lower()
     
     if response == 'y' or response == 'yes':
         max_signals = None
