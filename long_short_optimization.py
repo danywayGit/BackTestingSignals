@@ -58,7 +58,7 @@ else:
 
     if not backtest_file:
         print("❌ No backtest results with sufficient data found")
-    sys.exit(1)
+        sys.exit(1)
 
 print(f"📂 Loading backtest results: {backtest_file.name}")
 df = pd.read_csv(backtest_file)

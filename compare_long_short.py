@@ -10,9 +10,14 @@ from pathlib import Path
 from datetime import datetime
 import sys
 
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent / 'src'))
-from analytics.backtest_analyzer import BacktestAnalyzer
+from src.analytics.backtest_analyzer import BacktestAnalyzer
 
 def compare_long_short():
     """Compare LONG vs SHORT performance patterns"""

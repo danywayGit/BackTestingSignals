@@ -11,6 +11,11 @@ import json
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent))
 
