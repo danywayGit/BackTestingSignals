@@ -20,14 +20,15 @@ print("⚖️  SIGNAL SOURCES COMPARISON")
 print("=" * 80)
 print()
 
-# Load both analysis results
-telegram_file = 'long_short_optimization_meta_signals_20251104_050221.json'
-discord_file = 'long_short_optimization_meta_signals_20251104_031305.json'
+# Load both analysis results from data/analysis directory
+analysis_dir = Path('data/analysis')
+telegram_file = analysis_dir / 'long_short_optimization_meta_signals_20251104_050221.json'
+discord_file = analysis_dir / 'long_short_optimization_meta_signals_20251104_031305.json'
 
 try:
     with open(telegram_file, 'r') as f:
         telegram = json.load(f)
-    print(f"✅ Loaded Telegram analysis: {telegram_file}")
+    print(f"✅ Loaded Telegram analysis: {telegram_file.name}")
 except FileNotFoundError:
     print(f"❌ Telegram analysis not found: {telegram_file}")
     sys.exit(1)
@@ -35,7 +36,7 @@ except FileNotFoundError:
 try:
     with open(discord_file, 'r') as f:
         discord = json.load(f)
-    print(f"✅ Loaded Discord analysis: {discord_file}")
+    print(f"✅ Loaded Discord analysis: {discord_file.name}")
 except FileNotFoundError:
     print(f"❌ Discord analysis not found: {discord_file}")
     sys.exit(1)
@@ -277,7 +278,7 @@ comparison_output = {
     'comparison_date': datetime.now().isoformat(),
     'sources': {
         'telegram': {
-            'file': telegram_file,
+            'file': str(telegram_file),
             'total_signals': telegram['total_signals'],
             'long_wr': telegram['long_wr'],
             'short_wr': telegram['short_wr'],
@@ -285,7 +286,7 @@ comparison_output = {
             'filtered_short_wr': telegram['filtered_short_wr']
         },
         'discord': {
-            'file': discord_file,
+            'file': str(discord_file),
             'total_signals': discord['total_signals'],
             'long_wr': discord['long_wr'],
             'short_wr': discord['short_wr'],
@@ -306,7 +307,10 @@ comparison_output = {
     }
 }
 
-output_file = 'source_comparison_results.json'
+output_dir = Path('data/analysis')
+output_dir.mkdir(parents=True, exist_ok=True)
+output_file = output_dir / 'source_comparison_results.json'
+
 with open(output_file, 'w') as f:
     json.dump(comparison_output, f, indent=2)
 

@@ -6,6 +6,7 @@ Uses shared BacktestAnalyzer to avoid code duplication
 import json
 import sys
 from datetime import datetime
+from pathlib import Path
 from src.analytics import BacktestAnalyzer, load_latest_backtest
 
 # Fix Windows console encoding for emojis
@@ -214,7 +215,10 @@ for month in worst_months:
     print(f"❌ {month['month']:9s}: {month['win_rate']:5.1f}% WR ({month['wins']}/{month['total']})")
 
 # Save results
-output_file = 'short_optimization_results.json'
+output_dir = Path('data/analysis')
+output_dir.mkdir(parents=True, exist_ok=True)
+output_file = output_dir / 'short_optimization_results.json'
+
 with open(output_file, 'w') as f:
     json.dump(analysis_results, f, indent=2, default=str)
 

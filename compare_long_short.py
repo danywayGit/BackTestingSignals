@@ -276,7 +276,10 @@ def compare_long_short():
         'short_preferred_coins': [c['coin'] for c in short_preferred]
     }
     
-    output_file = 'long_vs_short_comparison_refactored.json'
+    output_dir = Path('data/analysis')
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_file = output_dir / 'long_vs_short_comparison_refactored.json'
+    
     with open(output_file, 'w') as f:
         json.dump(results, f, indent=2)
     

@@ -408,20 +408,25 @@ output = {
 }
 
 # Create output filename based on input file
+output_dir = Path('data/analysis')
+output_dir.mkdir(parents=True, exist_ok=True)
+
 output_filename = 'long_short_optimization_results.json'
 if len(sys.argv) > 1:
     # Extract base name from input file
     input_base = Path(sys.argv[1]).stem.replace('_backtest_detailed', '')
     output_filename = f'long_short_optimization_{input_base}.json'
 
-with open(output_filename, 'w') as f:
+output_path = output_dir / output_filename
+
+with open(output_path, 'w') as f:
     json.dump(output, f, indent=2)
 
 print("=" * 80)
 print("✅ ANALYSIS COMPLETE")
 print("=" * 80)
 print()
-print(f"📝 Results saved to: {output_filename}")
+print(f"📝 Results saved to: {output_path}")
 print()
 print("🔄 NEXT STEPS:")
 print("1. Use LONG rules for entry when signal direction is LONG")
