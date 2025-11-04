@@ -46,8 +46,8 @@ opencv-python>=4.12.0
 # yarl>=1.22.0
 
 # Optional packages for extended functionality
-# Telegram API (if needed later)
-# telethon>=1.24.0
+# Telegram API - for extracting signals from Telegram channels
+telethon>=1.35.0
 
 # Market data (if needed for backtesting)
 # yfinance>=0.1.87

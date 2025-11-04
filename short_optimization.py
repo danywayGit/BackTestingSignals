@@ -1,46 +1,39 @@
 """
-SHORT Signal Optimization Analysis
-Analyzes SHORT signal performance by day, hour, coin, month to identify optimal patterns
+SHORT Signal Optimization Analysis (Refactored)
+Uses shared BacktestAnalyzer to avoid code duplication
 """
 
-import pandas as pd
 import json
-from pathlib import Path
 from datetime import datetime
-from collections import defaultdict
+from src.analytics import BacktestAnalyzer, load_latest_backtest
 
-# Load the detailed backtest results
-results_file = "data/backtest_results/meta_signals_backtest_detailed_20251013_200942.csv"
-df = pd.read_csv(results_file)
+# Load latest backtest results
+df = load_latest_backtest()
 
 # Filter for SHORT signals only
 short_df = df[df['action'] == 'SHORT'].copy()
 
-# Add won column based on final_outcome
-short_df['won'] = short_df['final_outcome'].str.startswith('TARGET')
+# Initialize analyzer
+analyzer = BacktestAnalyzer(short_df)
 
 print("="*80)
 print("🔻 SHORT SIGNALS OPTIMIZATION ANALYSIS")
 print("="*80)
-print(f"\n📊 Dataset: {len(short_df)} SHORT signals")
-print(f"Overall SHORT Win Rate: {short_df['won'].sum() / len(short_df) * 100:.1f}%")
-print(f"Wins: {short_df['won'].sum()} | Losses: {(~short_df['won']).sum()}")
+
+# Overall stats
+overall = analyzer.get_overall_stats()
+print(f"\n📊 Dataset: {overall['total']} SHORT signals")
+print(f"Overall SHORT Win Rate: {overall['win_rate']:.1f}%")
+print(f"Wins: {overall['wins']} | Losses: {overall['losses']}")
 print("="*80)
 
-# Parse timestamps
-short_df['signal_time'] = pd.to_datetime(short_df['signal_time'])
-short_df['day_of_week'] = short_df['signal_time'].dt.day_name()
-short_df['hour_utc'] = short_df['signal_time'].dt.hour
-short_df['month'] = short_df['signal_time'].dt.month_name()
-short_df['date'] = short_df['signal_time'].dt.date
-
-# Analysis storage
+# Analysis results storage
 analysis_results = {
     'timestamp': datetime.now().isoformat(),
-    'total_short_signals': len(short_df),
-    'overall_short_wr': float(short_df['won'].sum() / len(short_df)),
-    'overall_short_wins': int(short_df['won'].sum()),
-    'overall_short_losses': int((~short_df['won']).sum()),
+    'total_short_signals': overall['total'],
+    'overall_short_wr': overall['win_rate'] / 100,
+    'overall_short_wins': overall['wins'],
+    'overall_short_losses': overall['losses'],
 }
 
 # ============================================================================
@@ -50,32 +43,11 @@ print("\n" + "="*80)
 print("📅 SHORT PERFORMANCE BY DAY OF WEEK")
 print("="*80)
 
-day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-day_stats = []
-
-for day in day_order:
-    day_data = short_df[short_df['day_of_week'] == day]
-    if len(day_data) > 0:
-        wins = day_data['won'].sum()
-        total = len(day_data)
-        wr = wins / total
-        avg_profit = day_data[day_data['won']]['max_profit_pct'].mean()
-        avg_loss = day_data[~day_data['won']]['max_drawdown_pct'].mean()
-        
-        day_stats.append({
-            'day': day,
-            'signals': total,
-            'wins': wins,
-            'losses': total - wins,
-            'win_rate': wr,
-            'avg_profit': avg_profit,
-            'avg_loss': avg_loss,
-            'pf': (avg_profit * wins) / (abs(avg_loss) * (total - wins)) if (total - wins) > 0 else float('inf')
-        })
-        
-        emoji = "✅" if wr > 0.50 else "⚠️" if wr > 0.45 else "❌"
-        print(f"{emoji} {day:9s}: {wr*100:5.1f}% WR ({wins:3d}/{total:3d}) | "
-              f"Avg Profit: {avg_profit:5.2f}% | Avg Loss: {avg_loss:5.2f}% | PF: {day_stats[-1]['pf']:.2f}")
+day_stats = analyzer.analyze_by_day_of_week()
+for day in day_stats:
+    emoji = "✅" if day['win_rate'] > 48 else "⚠️" if day['win_rate'] > 42 else "❌"
+    print(f"{emoji} {day['day']:9s}: {day['win_rate']:5.1f}% WR ({day['wins']:3d}/{day['total']:3d}) | "
+          f"Avg Profit: {day['avg_profit']:5.2f}% | Avg Loss: {day['avg_loss']:5.2f}% | PF: {day['profit_factor']:.2f}")
 
 analysis_results['by_day'] = day_stats
 
@@ -86,389 +58,159 @@ print("\n" + "="*80)
 print("⏰ SHORT PERFORMANCE BY HOUR (UTC)")
 print("="*80)
 
-hour_stats = []
-for hour in range(24):
-    hour_data = short_df[short_df['hour_utc'] == hour]
-    if len(hour_data) >= 5:  # Minimum 5 signals for meaningful analysis
-        wins = hour_data['won'].sum()
-        total = len(hour_data)
-        wr = wins / total
-        avg_profit = hour_data[hour_data['won']]['max_profit_pct'].mean()
-        avg_loss = hour_data[~hour_data['won']]['max_drawdown_pct'].mean()
-        
-        hour_stats.append({
-            'hour': hour,
-            'signals': total,
-            'wins': wins,
-            'losses': total - wins,
-            'win_rate': wr,
-            'avg_profit': avg_profit,
-            'avg_loss': avg_loss,
-            'pf': (avg_profit * wins) / (abs(avg_loss) * (total - wins)) if (total - wins) > 0 else float('inf'),
-            'improvement_vs_baseline': (wr - analysis_results['overall_short_wr']) * 100
-        })
-        
-        emoji = "🌟" if wr > 0.55 else "✅" if wr > 0.48 else "⚠️" if wr > 0.40 else "❌"
-        improvement = (wr - analysis_results['overall_short_wr']) * 100
-        print(f"{emoji} {hour:02d}:00: {wr*100:5.1f}% WR ({wins:2d}/{total:2d}) | "
-              f"PF: {hour_stats[-1]['pf']:.2f} | vs Baseline: {improvement:+5.1f}%")
+hour_stats = analyzer.analyze_by_hour(min_signals=5)
+overall_wr = overall['win_rate']
 
-# Sort by win rate
-hour_stats_sorted = sorted(hour_stats, key=lambda x: x['win_rate'], reverse=True)
+for hour in hour_stats:
+    diff_vs_baseline = hour['win_rate'] - overall_wr
+    
+    if hour['win_rate'] > 55:
+        emoji = "🌟"
+    elif hour['win_rate'] > 48:
+        emoji = "✅"
+    elif hour['win_rate'] > 42:
+        emoji = "⚠️"
+    else:
+        emoji = "❌"
+    
+    print(f"{emoji} {hour['hour']:02d}:00: {hour['win_rate']:5.1f}% WR ({hour['wins']:2d}/{hour['total']:2d}) | "
+          f"PF: {hour['profit_factor']:.2f} | vs Baseline: {diff_vs_baseline:+5.1f}%")
+
+# Top 5 hours
+print(f"\n🏆 TOP 5 SHORT HOURS:")
+top_hours = analyzer.get_best_performers('hour', top_n=5, min_signals=5)
+for i, h in enumerate(top_hours, 1):
+    print(f"{i}. {h['hour']:02d}:00 UTC: {h['win_rate']:.1f}% WR ({h['wins']}/{h['total']}) PF: {h['profit_factor']:.2f}")
+
 analysis_results['by_hour'] = hour_stats
 
-print("\n🏆 TOP 5 SHORT HOURS:")
-for i, stat in enumerate(hour_stats_sorted[:5], 1):
-    print(f"{i}. {stat['hour']:02d}:00 UTC: {stat['win_rate']*100:.1f}% WR "
-          f"({stat['wins']}/{stat['signals']}) PF: {stat['pf']:.2f}")
-
 # ============================================================================
-# 3. COIN ANALYSIS
+# 3. COIN PERFORMANCE ANALYSIS
 # ============================================================================
 print("\n" + "="*80)
 print("🪙 SHORT PERFORMANCE BY COIN")
 print("="*80)
 
-coin_stats = []
-coin_groups = short_df.groupby('symbol')
+coin_stats = analyzer.analyze_by_coin(min_signals=3)
 
-for coin, coin_data in coin_groups:
-    if len(coin_data) >= 3:  # Minimum 3 signals
-        wins = coin_data['won'].sum()
-        total = len(coin_data)
-        wr = wins / total
-        avg_profit = coin_data[coin_data['won']]['max_profit_pct'].mean()
-        avg_loss = coin_data[~coin_data['won']]['max_drawdown_pct'].mean()
-        
-        coin_stats.append({
-            'coin': coin,
-            'signals': total,
-            'wins': wins,
-            'losses': total - wins,
-            'win_rate': wr,
-            'avg_profit': avg_profit,
-            'avg_loss': avg_loss,
-            'pf': (avg_profit * wins) / (abs(avg_loss) * (total - wins)) if (total - wins) > 0 else float('inf')
-        })
+print(f"\n🏆 TOP SHORT COINS (sorted by WR, then signal count):")
+for i, coin in enumerate(coin_stats[:15], 1):
+    emoji = "🌟" if coin['win_rate'] > 65 else "✅" if coin['win_rate'] > 55 else "⚠️"
+    pf_str = "inf" if coin['profit_factor'] == float('inf') else f"{coin['profit_factor']:.2f}"
+    print(f"{emoji} {i:2d}. {coin['symbol']:<6s}: {coin['win_rate']:5.1f}% WR ({coin['wins']:2d}/{coin['total']:2d}) | "
+          f"Avg Profit: {coin['avg_profit']:5.2f}% | PF: {pf_str}")
 
-# Sort by win rate, then by signal count
-coin_stats_sorted = sorted(coin_stats, key=lambda x: (x['win_rate'], x['signals']), reverse=True)
 analysis_results['by_coin'] = coin_stats
 
-print("\n🏆 TOP SHORT COINS (sorted by WR, then signal count):")
-for i, stat in enumerate(coin_stats_sorted[:15], 1):
-    emoji = "🌟" if stat['win_rate'] > 0.60 else "✅" if stat['win_rate'] > 0.48 else "⚠️"
-    print(f"{emoji} {i:2d}. {stat['coin']:6s}: {stat['win_rate']*100:5.1f}% WR "
-          f"({stat['wins']:2d}/{stat['signals']:2d}) | "
-          f"Avg Profit: {stat['avg_profit']:5.2f}% | PF: {stat['pf']:.2f}")
-
 # ============================================================================
-# 4. MONTH ANALYSIS
+# 4. MONTH PERFORMANCE ANALYSIS
 # ============================================================================
 print("\n" + "="*80)
 print("📆 SHORT PERFORMANCE BY MONTH")
 print("="*80)
 
-month_order = ['January', 'February', 'March', 'April', 'May', 'June', 
-               'July', 'August', 'September', 'October', 'November', 'December']
-month_stats = []
-
-for month in month_order:
-    month_data = short_df[short_df['month'] == month]
-    if len(month_data) > 0:
-        wins = month_data['won'].sum()
-        total = len(month_data)
-        wr = wins / total
-        avg_profit = month_data[month_data['won']]['max_profit_pct'].mean()
-        avg_loss = month_data[~month_data['won']]['max_drawdown_pct'].mean()
-        
-        month_stats.append({
-            'month': month,
-            'signals': total,
-            'wins': wins,
-            'losses': total - wins,
-            'win_rate': wr,
-            'avg_profit': avg_profit,
-            'avg_loss': avg_loss,
-            'pf': (avg_profit * wins) / (abs(avg_loss) * (total - wins)) if (total - wins) > 0 else float('inf')
-        })
-        
-        emoji = "✅" if wr > 0.48 else "⚠️" if wr > 0.40 else "❌"
-        print(f"{emoji} {month:9s}: {wr*100:5.1f}% WR ({wins:3d}/{total:3d}) | "
-              f"Avg Profit: {avg_profit:5.2f}% | PF: {month_stats[-1]['pf']:.2f}")
+month_stats = analyzer.analyze_by_month()
+for month in month_stats:
+    emoji = "✅" if month['win_rate'] > 48 else "⚠️" if month['win_rate'] > 42 else "❌"
+    print(f"{emoji} {month['month']:9s}: {month['win_rate']:5.1f}% WR ({month['wins']:3d}/{month['total']:3d}) | "
+          f"Avg Profit: {month['avg_profit']:5.2f}% | PF: {month['profit_factor']:.2f}")
 
 analysis_results['by_month'] = month_stats
 
 # ============================================================================
-# 5. COMBINATION ANALYSIS - Find perfect SHORT setups
+# 5. PERFECT COMBINATIONS
 # ============================================================================
 print("\n" + "="*80)
 print("🎯 PERFECT SHORT COMBINATIONS (100% Win Rate with 3+ signals)")
 print("="*80)
 
-perfect_combos = []
+day_hour_combos, day_coin_combos = analyzer.find_perfect_combinations(min_signals=3)
 
-# Coin + Day combinations
-for coin in short_df['symbol'].unique():
-    for day in day_order:
-        combo_data = short_df[(short_df['symbol'] == coin) & (short_df['day_of_week'] == day)]
-        if len(combo_data) >= 3 and combo_data['won'].all():
-            wins = combo_data['won'].sum()
-            total = len(combo_data)
-            avg_profit = combo_data['max_profit_pct'].mean()
-            perfect_combos.append({
-                'type': 'Coin+Day',
-                'combo': f"{coin} on {day}",
-                'signals': total,
-                'wins': wins,
-                'avg_profit': avg_profit
-            })
-            print(f"🌟 {coin} on {day}: {total}/{total} wins | Avg Profit: {avg_profit:.2f}%")
-
-# Coin + Hour combinations
-for coin in short_df['symbol'].unique():
-    for hour in range(24):
-        combo_data = short_df[(short_df['symbol'] == coin) & (short_df['hour_utc'] == hour)]
-        if len(combo_data) >= 3 and combo_data['won'].all():
-            wins = combo_data['won'].sum()
-            total = len(combo_data)
-            avg_profit = combo_data['max_profit_pct'].mean()
-            perfect_combos.append({
-                'type': 'Coin+Hour',
-                'combo': f"{coin} at {hour:02d}:00",
-                'signals': total,
-                'wins': wins,
-                'avg_profit': avg_profit
-            })
-            print(f"🌟 {coin} at {hour:02d}:00: {total}/{total} wins | Avg Profit: {avg_profit:.2f}%")
-
-# Day + Hour combinations
-for day in day_order:
-    for hour in range(24):
-        combo_data = short_df[(short_df['day_of_week'] == day) & (short_df['hour_utc'] == hour)]
-        if len(combo_data) >= 3 and combo_data['won'].all():
-            wins = combo_data['won'].sum()
-            total = len(combo_data)
-            avg_profit = combo_data['max_profit_pct'].mean()
-            perfect_combos.append({
-                'type': 'Day+Hour',
-                'combo': f"{day} at {hour:02d}:00",
-                'signals': total,
-                'wins': wins,
-                'avg_profit': avg_profit
-            })
-            print(f"🌟 {day} at {hour:02d}:00: {total}/{total} wins | Avg Profit: {avg_profit:.2f}%")
-
-if not perfect_combos:
-    print("No perfect combinations found with 3+ signals.")
-
-analysis_results['perfect_combinations'] = perfect_combos
+if day_hour_combos:
+    for combo in day_hour_combos:
+        print(f"🌟 {combo['day']} at {combo['hour']:02d}:00: {combo['wins']}/{combo['signals']} wins | "
+              f"Avg Profit: {combo['avg_profit']:.2f}%")
+else:
+    print("No perfect day+hour combinations found.")
 
 # ============================================================================
-# 6. HIGH-PERFORMANCE SHORT COMBINATIONS (>60% WR with 5+ signals)
-# ============================================================================
-print("\n" + "="*80)
-print("🎯 HIGH-PERFORMANCE SHORT COMBINATIONS (>60% WR, 5+ signals)")
-print("="*80)
-
-high_perf_combos = []
-
-# Coin + Day combinations
-for coin in short_df['symbol'].unique():
-    for day in day_order:
-        combo_data = short_df[(short_df['symbol'] == coin) & (short_df['day_of_week'] == day)]
-        if len(combo_data) >= 5:
-            wins = combo_data['won'].sum()
-            total = len(combo_data)
-            wr = wins / total
-            if wr > 0.60:
-                avg_profit = combo_data[combo_data['won']]['max_profit_pct'].mean()
-                high_perf_combos.append({
-                    'type': 'Coin+Day',
-                    'combo': f"{coin} on {day}",
-                    'signals': total,
-                    'wins': wins,
-                    'win_rate': wr,
-                    'avg_profit': avg_profit
-                })
-                print(f"✅ {coin} on {day}: {wr*100:.1f}% WR ({wins}/{total}) | Avg Profit: {avg_profit:.2f}%")
-
-# Coin + Hour combinations
-for coin in short_df['symbol'].unique():
-    for hour in range(24):
-        combo_data = short_df[(short_df['symbol'] == coin) & (short_df['hour_utc'] == hour)]
-        if len(combo_data) >= 5:
-            wins = combo_data['won'].sum()
-            total = len(combo_data)
-            wr = wins / total
-            if wr > 0.60:
-                avg_profit = combo_data[combo_data['won']]['max_profit_pct'].mean()
-                high_perf_combos.append({
-                    'type': 'Coin+Hour',
-                    'combo': f"{coin} at {hour:02d}:00",
-                    'signals': total,
-                    'wins': wins,
-                    'win_rate': wr,
-                    'avg_profit': avg_profit
-                })
-                print(f"✅ {coin} at {hour:02d}:00: {wr*100:.1f}% WR ({wins}/{total}) | Avg Profit: {avg_profit:.2f}%")
-
-if not high_perf_combos:
-    print("No high-performance combinations found with 5+ signals.")
-
-analysis_results['high_performance_combinations'] = high_perf_combos
-
-# ============================================================================
-# 7. FILTERED SHORT STRATEGY
+# 6. OPTIMIZED STRATEGY
 # ============================================================================
 print("\n" + "="*80)
 print("🎯 OPTIMIZED SHORT STRATEGY")
 print("="*80)
 
-# Identify best filters based on analysis
-best_days = [stat['day'] for stat in day_stats if stat['win_rate'] > 0.48]
-best_hours = [stat['hour'] for stat in hour_stats if stat['win_rate'] > 0.50 and stat['signals'] >= 5]
-best_coins = [stat['coin'] for stat in coin_stats if stat['win_rate'] > 0.55 and stat['signals'] >= 3]
+# Get best performers for filters
+best_days = [d['day'] for d in day_stats if d['win_rate'] > overall_wr]
+best_hours = [h['hour'] for h in hour_stats if h['win_rate'] > 50 and h['total'] >= 5]
+best_coins = [c['symbol'] for c in coin_stats if c['win_rate'] > 55 and c['total'] >= 3]
 
 print(f"\n📋 FILTER CRITERIA:")
-print(f"Best Days (>48% WR): {', '.join(best_days) if best_days else 'None'}")
-print(f"Best Hours (>50% WR, 5+ signals): {', '.join([f'{h:02d}:00' for h in best_hours]) if best_hours else 'None'}")
-print(f"Best Coins (>55% WR, 3+ signals): {', '.join(best_coins) if best_coins else 'None'}")
+print(f"Best Days (>{overall_wr:.0f}% WR): {', '.join(best_days)}")
+print(f"Best Hours (>50% WR, 5+ signals): {', '.join([f'{h:02d}:00' for h in best_hours])}")
+print(f"Best Coins (>55% WR, 3+ signals): {', '.join(best_coins)}")
 
 # Apply progressive filters
-filters = []
+tier1 = analyzer.apply_filters(days=best_days)
+tier1_stats = analyzer.get_overall_stats(tier1)
 
-# Filter 1: Best days only
-if best_days:
-    filtered_df = short_df[short_df['day_of_week'].isin(best_days)]
-    wins = filtered_df['won'].sum()
-    total = len(filtered_df)
-    wr = wins / total if total > 0 else 0
-    filters.append({
-        'name': 'Best Days Only',
-        'criteria': f"Days in {best_days}",
-        'signals': total,
-        'wins': wins,
-        'win_rate': wr,
-        'pct_of_total': total / len(short_df) * 100
-    })
-    print(f"\n✅ Filter 1 - Best Days: {wr*100:.1f}% WR ({wins}/{total}) - {total/len(short_df)*100:.1f}% of signals")
+tier2 = analyzer.apply_filters(days=best_days, hours=best_hours)
+tier2_stats = analyzer.get_overall_stats(tier2)
 
-# Filter 2: Best days + Best hours
-if best_days and best_hours:
-    filtered_df = short_df[short_df['day_of_week'].isin(best_days) & short_df['hour_utc'].isin(best_hours)]
-    wins = filtered_df['won'].sum()
-    total = len(filtered_df)
-    wr = wins / total if total > 0 else 0
-    filters.append({
-        'name': 'Best Days + Hours',
-        'criteria': f"Days {best_days} + Hours {best_hours}",
-        'signals': total,
-        'wins': wins,
-        'win_rate': wr,
-        'pct_of_total': total / len(short_df) * 100
-    })
-    print(f"✅ Filter 2 - Best Days + Hours: {wr*100:.1f}% WR ({wins}/{total}) - {total/len(short_df)*100:.1f}% of signals")
+tier3 = analyzer.apply_filters(coins=best_coins)
+tier3_stats = analyzer.get_overall_stats(tier3)
 
-# Filter 3: Best coins only
-if best_coins:
-    filtered_df = short_df[short_df['symbol'].isin(best_coins)]
-    wins = filtered_df['won'].sum()
-    total = len(filtered_df)
-    wr = wins / total if total > 0 else 0
-    filters.append({
-        'name': 'Best Coins Only',
-        'criteria': f"Coins in {best_coins}",
-        'signals': total,
-        'wins': wins,
-        'win_rate': wr,
-        'pct_of_total': total / len(short_df) * 100
-    })
-    print(f"✅ Filter 3 - Best Coins: {wr*100:.1f}% WR ({wins}/{total}) - {total/len(short_df)*100:.1f}% of signals")
+tier4 = analyzer.apply_filters(days=best_days, coins=best_coins)
+tier4_stats = analyzer.get_overall_stats(tier4)
 
-# Filter 4: Best days + Best coins
-if best_days and best_coins:
-    filtered_df = short_df[short_df['day_of_week'].isin(best_days) & short_df['symbol'].isin(best_coins)]
-    wins = filtered_df['won'].sum()
-    total = len(filtered_df)
-    wr = wins / total if total > 0 else 0
-    filters.append({
-        'name': 'Best Days + Coins',
-        'criteria': f"Days {best_days} + Coins {best_coins}",
-        'signals': total,
-        'wins': wins,
-        'win_rate': wr,
-        'pct_of_total': total / len(short_df) * 100
-    })
-    print(f"✅ Filter 4 - Best Days + Coins: {wr*100:.1f}% WR ({wins}/{total}) - {total/len(short_df)*100:.1f}% of signals")
+tier5 = analyzer.apply_filters(days=best_days, hours=best_hours, coins=best_coins)
+tier5_stats = analyzer.get_overall_stats(tier5)
 
-# Filter 5: Ultra-filtered (Best days + hours + coins)
-if best_days and best_hours and best_coins:
-    filtered_df = short_df[
-        short_df['day_of_week'].isin(best_days) & 
-        short_df['hour_utc'].isin(best_hours) & 
-        short_df['symbol'].isin(best_coins)
-    ]
-    wins = filtered_df['won'].sum()
-    total = len(filtered_df)
-    wr = wins / total if total > 0 else 0
-    filters.append({
-        'name': 'Ultra-Filtered',
-        'criteria': f"Days {best_days} + Hours {best_hours} + Coins {best_coins}",
-        'signals': total,
-        'wins': wins,
-        'win_rate': wr,
-        'pct_of_total': total / len(short_df) * 100
-    })
-    print(f"✅ Filter 5 - Ultra-Filtered: {wr*100:.1f}% WR ({wins}/{total}) - {total/len(short_df)*100:.1f}% of signals")
+print(f"\n✅ Filter 1 - Best Days: {tier1_stats['win_rate']:.1f}% WR ({tier1_stats['wins']}/{tier1_stats['total']}) - {tier1_stats['total']/overall['total']*100:.1f}% of signals")
+print(f"✅ Filter 2 - Best Days + Hours: {tier2_stats['win_rate']:.1f}% WR ({tier2_stats['wins']}/{tier2_stats['total']}) - {tier2_stats['total']/overall['total']*100:.1f}% of signals")
+print(f"✅ Filter 3 - Best Coins: {tier3_stats['win_rate']:.1f}% WR ({tier3_stats['wins']}/{tier3_stats['total']}) - {tier3_stats['total']/overall['total']*100:.1f}% of signals")
+print(f"✅ Filter 4 - Best Days + Coins: {tier4_stats['win_rate']:.1f}% WR ({tier4_stats['wins']}/{tier4_stats['total']}) - {tier4_stats['total']/overall['total']*100:.1f}% of signals")
+print(f"✅ Filter 5 - Ultra-Filtered: {tier5_stats['win_rate']:.1f}% WR ({tier5_stats['wins']}/{tier5_stats['total']}) - {tier5_stats['total']/overall['total']*100:.1f}% of signals")
 
-analysis_results['filtered_strategies'] = filters
+analysis_results['strategy_tiers'] = {
+    'tier1_best_days': tier1_stats,
+    'tier2_days_hours': tier2_stats,
+    'tier3_best_coins': tier3_stats,
+    'tier4_days_coins': tier4_stats,
+    'tier5_ultra_filtered': tier5_stats
+}
 
 # ============================================================================
-# 8. WORST PERFORMERS - What to avoid
+# 7. WORST PERFORMERS - AVOID THESE
 # ============================================================================
 print("\n" + "="*80)
 print("❌ WORST SHORT PERFORMERS - AVOID THESE")
 print("="*80)
 
-print("\n📅 Worst Days:")
-worst_days = sorted(day_stats, key=lambda x: x['win_rate'])[:3]
-for stat in worst_days:
-    print(f"❌ {stat['day']:9s}: {stat['win_rate']*100:5.1f}% WR ({stat['wins']}/{stat['signals']})")
+worst_days = analyzer.get_worst_performers('day', bottom_n=3)
+print(f"\n📅 Worst Days:")
+for day in worst_days:
+    print(f"❌ {day['day']:9s}: {day['win_rate']:5.1f}% WR ({day['wins']}/{day['total']})")
 
-print("\n⏰ Worst Hours (with 5+ signals):")
-worst_hours = sorted([h for h in hour_stats if h['signals'] >= 5], key=lambda x: x['win_rate'])[:5]
-for stat in worst_hours:
-    print(f"❌ {stat['hour']:02d}:00: {stat['win_rate']*100:5.1f}% WR ({stat['wins']}/{stat['signals']})")
+worst_hours = analyzer.get_worst_performers('hour', bottom_n=5, min_signals=5)
+print(f"\n⏰ Worst Hours (with 5+ signals):")
+for hour in worst_hours:
+    print(f"❌ {hour['hour']:02d}:00: {hour['win_rate']:5.1f}% WR ({hour['wins']}/{hour['total']})")
 
-print("\n🪙 Worst Coins (with 3+ signals):")
-worst_coins = sorted([c for c in coin_stats if c['signals'] >= 3], key=lambda x: x['win_rate'])[:10]
-for stat in worst_coins:
-    print(f"❌ {stat['coin']:6s}: {stat['win_rate']*100:5.1f}% WR ({stat['wins']}/{stat['signals']})")
+worst_coins = analyzer.get_worst_performers('coin', bottom_n=10, min_signals=3)
+print(f"\n🪙 Worst Coins (with 3+ signals):")
+for coin in worst_coins:
+    print(f"❌ {coin['symbol']:<6s}: {coin['win_rate']:5.1f}% WR ({coin['wins']}/{coin['total']})")
 
-print("\n📆 Worst Months:")
-worst_months = sorted(month_stats, key=lambda x: x['win_rate'])[:3]
-for stat in worst_months:
-    print(f"❌ {stat['month']:9s}: {stat['win_rate']*100:5.1f}% WR ({stat['wins']}/{stat['signals']})")
+worst_months = analyzer.get_worst_performers('month', bottom_n=3)
+print(f"\n📆 Worst Months:")
+for month in worst_months:
+    print(f"❌ {month['month']:9s}: {month['win_rate']:5.1f}% WR ({month['wins']}/{month['total']})")
 
-# ============================================================================
-# SAVE RESULTS
-# ============================================================================
-# Convert numpy types to native Python types for JSON serialization
-def convert_to_native_types(obj):
-    if isinstance(obj, dict):
-        return {k: convert_to_native_types(v) for k, v in obj.items()}
-    elif isinstance(obj, list):
-        return [convert_to_native_types(item) for item in obj]
-    elif hasattr(obj, 'item'):  # numpy types
-        return obj.item()
-    else:
-        return obj
-
-output_file = "short_optimization_results.json"
+# Save results
+output_file = 'short_optimization_results.json'
 with open(output_file, 'w') as f:
-    json.dump(convert_to_native_types(analysis_results), f, indent=2)
+    json.dump(analysis_results, f, indent=2, default=str)
 
-print("\n" + "="*80)
-print(f"✅ Analysis complete! Results saved to {output_file}")
+print(f"\n✅ Analysis complete! Results saved to {output_file}")
 print("="*80)
