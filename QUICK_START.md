@@ -102,7 +102,7 @@ python analyze_davidtech.py
 # OR run individual analyses:
 
 # Analyze LONG signals
-python corrected_optimization.py
+python long_short_optimization.py
 
 # Analyze SHORT signals
 python short_optimization.py

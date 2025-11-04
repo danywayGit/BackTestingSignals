@@ -94,7 +94,7 @@ Results saved to `data/backtest_results/`
 python analyze_davidtech.py
 
 # Individual optimization analyses
-python corrected_optimization.py    # LONG signal optimization
+python long_short_optimization.py    # LONG & SHORT signal optimization
 python short_optimization.py        # SHORT signal optimization
 python compare_long_short.py        # Compare LONG vs SHORT performance
 python compare_october_november.py  # Monthly performance comparison
@@ -144,7 +144,7 @@ BackTestingSignals/
 ├── extract_telegram.py         # Telegram signal extraction (DaviddTech)
 ├── full_backtest.py            # Backtesting engine
 ├── analyze_davidtech.py        # Comprehensive optimization analysis
-├── corrected_optimization.py   # LONG signal optimization
+├── long_short_optimization.py   # LONG & SHORT signal optimization
 ├── short_optimization.py       # SHORT signal optimization
 ├── compare_long_short.py       # Compare LONG vs SHORT
 ├── compare_october_november.py # Monthly comparison
@@ -401,7 +401,7 @@ python full_backtest.py <csv_file>       # Backtest specific file
 python analyze_davidtech.py              # Full optimization analysis
 
 # Individual analyses
-python corrected_optimization.py         # Analyze LONG signals
+python long_short_optimization.py         # Analyze LONG & SHORT signals
 python short_optimization.py             # Analyze SHORT signals
 python compare_long_short.py             # Compare LONG vs SHORT
 python compare_october_november.py       # Monthly comparison

@@ -169,48 +169,52 @@ Best Day: Thursday (53.2% WR)
 
 ---
 
-### corrected_optimization.py �
+### long_short_optimization.py 📊
 
-**Purpose**: Analyze LONG signal performance and find optimal patterns
+**Purpose**: Comprehensive optimization analysis for both LONG and SHORT signals
 
 **Usage**:
 ```bash
-python corrected_optimization.py
+python long_short_optimization.py
 ```
 
 **What it does**:
 - Loads latest backtest results
-- Filters for LONG signals only
-- Analyzes performance by day/hour/coin/month
-- Identifies high-performance patterns (>60% WR)
-- Progressive filtering strategies
+- Analyzes LONG signals: performance by day/hour/coin/month
+- Analyzes SHORT signals: performance by day/hour/coin/month
+- Identifies high-performance patterns (>60% WR) for both
+- Progressive filtering strategies for each type
 - Perfect combinations (100% WR patterns)
 
 **Analysis output**:
-- Overall LONG statistics
-- Performance by day of week
-- Performance by hour (UTC)
-- Performance by coin/symbol
-- Performance by month
-- Best combinations
-- Filtered strategies (Conservative, Moderate, Aggressive, Ultra)
+- Overall LONG and SHORT statistics separately
+- Performance by day of week (both types)
+- Performance by hour UTC (both types)
+- Performance by coin/symbol (both types)
+- Performance by month (both types)
+- Best combinations for each
+- Filtered strategies with improvements
 
 **Output files**:
-- `data/results/corrected_optimization_results.json`
-- Console output with recommendations
+- `long_short_optimization_results.json`
+- Console output with separate recommendations for LONG and SHORT
 
 **Example findings**:
 ```
 🟢 LONG SIGNALS (773 total)
 Overall: 50.6% WR (391/773)
-
 Best Days: Wed (60%), Sat (58%), Sun (55%)
 Best Hours: 01:00-03:00 UTC
 Best Coins: BNB (80% WR), FET (67% WR)
-AVOID: Thursday (33.3% WR - THE THURSDAY CURSE)
+
+🔴 SHORT SIGNALS (366 total)
+Overall: 48.2% WR (176/366)
+Best Days: Mon (55%), Fri (53%)
+Best Hours: 18:00-20:00 UTC
+Best Coins: ETH (72% WR), XRP (65% WR)
 ```
 
-**When to use**: After backtesting to optimize LONG signal strategy
+**When to use**: After backtesting to optimize both LONG and SHORT signal strategies
 
 ---
 
