@@ -1,6 +1,6 @@
 # Script Reference Guide
 
-Quick reference for all scripts in the BackTesting Signals project.
+Quick reference for all scripts in the BackTesting Signals project (v2.1.0 - Updated Nov 4, 2025).
 
 ## 📋 Table of Contents
 
@@ -9,95 +9,68 @@ Quick reference for all scripts in the BackTesting Signals project.
 3. [Analysis Scripts](#analysis-scripts)
 4. [Utility Scripts](#utility-scripts)
 5. [Test Scripts](#test-scripts)
+6. [Archived Scripts](#archived-scripts)
 
 ---
 
 ## Signal Extraction Scripts
 
-### quick_extract.py ⚡ (RECOMMENDED)
+### extract_telegram.py 📱 (PRODUCTION)
 
-**Purpose**: Fast extraction of all historical signals from Discord channel
+**Purpose**: Production-ready Telegram signal extraction (DaviddTech format)
 
 **Usage**:
 ```bash
-python quick_extract.py
+python extract_telegram.py
 ```
 
 **What it does**:
-- Connects to Discord using your user token
-- Fetches all messages from Meta Signals "Free Alerts" channel
-- Parses signal format (Entry, Targets, Stop Loss)
-- Saves to SQLite database
-- Exports to CSV and JSON
+- Connects to Telegram using Telethon library
+- Fetches messages from DaviddTech channel (@DaviddTech)
+- Parses DaviddTech signal format (LONG/SHORT, Entry, Targets, Stop Loss)
+- Supports historical extraction (up to 365 days back)
+- Saves to CSV and JSON
+
+**Configuration**: Uses `config/config.json`:
+```json
+{
+  "telegram": {
+    "api_id": "YOUR_API_ID",
+    "api_hash": "YOUR_API_HASH",
+    "phone_number": "+1234567890",
+    "channels": [
+      {
+        "name": "DaviddTech",
+        "username": "DaviddTech"
+      }
+    ]
+  }
+}
+```
 
 **Output files**:
-- `data/signals/meta_signals_YYYYMMDD_HHMMSS.db`
-- `data/signals/meta_signals_YYYYMMDD_HHMMSS.csv`
-- `data/signals/meta_signals_YYYYMMDD_HHMMSS.json`
+- `data/signals/telegram_signals_export_YYYYMMDD_HHMMSS.csv`
+- `data/signals/telegram_signals_export_YYYYMMDD_HHMMSS.json`
+- `data/cache/telegram_messages_sample.json` (debug sample)
+- `data/cache/signal_extractor.session` (Telegram session)
 
-**Performance**: Processes 1000 messages in ~45 seconds
+**Performance**: Extracted 805 signals (365 days) successfully
 
-**Success rate**: 98.9% parsing accuracy (989/1000 signals)
+**Success rate**: High accuracy with DaviddTech format
 
----
-
-### extract_signals.py
-
-**Purpose**: Alternative signal extraction method
-
-**Usage**:
-```bash
-python extract_signals.py
-```
-
-**What it does**:
-- Different extraction approach from quick_extract.py
-- May work better for certain message formats
-- Similar output format
-
-**When to use**: If quick_extract.py has issues
+**Setup guide**: `docs/setup/telegram_setup.md`
 
 ---
 
-### bulk_extract.py
+### Discord Extraction (ARCHIVED)
 
-**Purpose**: Batch processing for large datasets
+Discord extraction scripts have been archived to `archive/extraction_methods/`:
+- `extract_signals.py` - Complex OCR-based extractor
+- `extract_all_signals.py` - Simple web API method
+- `quick_extract.py` - Direct token extraction
+- `bulk_extract.py` - Hybrid batch extractor
 
-**Usage**:
-```bash
-python bulk_extract.py
-```
-
-**What it does**:
-- Process multiple channels simultaneously
-- Memory-efficient for thousands of messages
-- Batch processing with progress tracking
-
-**When to use**: Processing multiple channels or very large datasets (10,000+ messages)
-
----
-
-### inspect_messages.py
-
-**Purpose**: Debug and analysis tool for Discord messages
-
-**Usage**:
-```bash
-python inspect_messages.py
-```
-
-**What it does**:
-- Fetch raw Discord messages
-- Display message structure
-- Test parsing logic
-- Generate message analysis report
-
-**Output**: `message_analysis.json`
-
-**When to use**: 
-- Debugging parsing issues
-- Understanding message format
-- Validating Discord connection
+**When to use**: Reference implementations available in archive for Discord signal extraction.
 
 ---
 
@@ -109,190 +82,322 @@ python inspect_messages.py
 
 **Usage**:
 ```bash
+# Interactive (prompts for file selection)
 python full_backtest.py
+
+# Specific file
+python full_backtest.py data/signals/telegram_signals_export_20251104_043620.csv
 ```
 
 **What it does**:
-1. Load signals from database
-2. Fetch 1-minute OHLCV data from Binance
-3. Simulate trading positions
+1. Load signals from CSV
+2. Fetch 1-minute OHLCV data from Binance (72 hours after signal)
+3. Simulate trading positions (LONG/SHORT)
 4. Track target hits (1, 2, 3) and stop loss
 5. Calculate performance metrics
-6. Save results to CSV/JSON
+6. Save detailed results
 
 **Features**:
-- Batch processing: 50 signals at a time
-- Progress tracking: ⏳ Progress: X/989 (X.X%)
-- Intelligent caching: Saves Binance data locally
-- Intermediate saves: Every 50 signals
-- Error recovery: Can resume from last batch
+- Batch processing: Efficient signal processing
+- Progress tracking: Real-time progress updates
+- Intelligent caching: Saves Binance data to `data/cache/`
+- Error recovery: Can handle failed requests
+- LONG/SHORT support: Proper direction tracking
 
 **Output files**:
-- `data/results/backtest_results_YYYYMMDD_HHMMSS.csv`
-- `data/results/backtest_summary_YYYYMMDD_HHMMSS.json`
-- `intermediate_results_XXX_XXXXXX.csv` (every 50 signals)
+- `data/backtest_results/meta_signals_backtest_detailed_YYYYMMDD_HHMMSS.csv`
+- `data/backtest_results/meta_signals_backtest_metrics_YYYYMMDD_HHMMSS.json`
 
 **Performance**: 
-- ~2-3 seconds per signal (first run)
-- ~0.5-1 second per signal (cached)
-- 989 signals: ~30-45 minutes first run
+- DaviddTech 805 signals: 25 minutes 29 seconds
+- Uses cached data on subsequent runs
 
 **Metrics calculated**:
-- Win rate
+- Win rate (overall, LONG, SHORT)
 - Profit factor
-- Average time to target
+- Average profit/loss
+- Best/worst trades
+- Time to target statistics
 - Target hit distribution
-- Stop loss analysis
-- Max drawdown
 
----
-
-### test_backtest.py
-
-**Purpose**: Unit tests for backtesting logic
-
-**Usage**:
-```bash
-python test_backtest.py
-```
-
-**What it does**:
-- Test position tracking
-- Validate target hit detection
-- Test stop loss logic
-- Verify profit/loss calculations
-
-**When to use**: 
-- Validating code changes
-- Ensuring calculation accuracy
-- Regression testing
+**Results**: DaviddTech analysis showed 48.2% WR (388/805 wins)
 
 ---
 
 ## Analysis Scripts
 
-### advanced_analysis.py 📊
+All analysis scripts now use the shared `BacktestAnalyzer` class from `src/analytics/backtest_analyzer.py`.
 
-**Purpose**: Deep performance analytics on backtest results
+### analyze_davidtech.py 📊 (COMPREHENSIVE ANALYSIS)
+
+**Purpose**: All-in-one optimization analysis using latest backtest results
 
 **Usage**:
 ```bash
-python advanced_analysis.py
+python analyze_davidtech.py
 ```
 
 **What it does**:
-1. Load backtest results
-2. Analyze performance by symbol
-3. Find optimal trading hours
-4. Study market conditions
-5. Calculate profit distributions
-6. Identify correlations
+1. Automatically loads latest backtest results from `data/backtest_results/`
+2. Performs comprehensive optimization analysis
+3. Analyzes performance by day, hour, coin, month
+4. Identifies best and worst performing patterns
+5. Generates detailed markdown report
 
 **Analysis includes**:
-
-#### Symbol Performance
-- Win rate by cryptocurrency
-- Profit/loss by symbol
-- Number of signals per symbol
-- Best and worst performers
-
-Example output:
-```
-🏆 Best Performing Symbols:
-   AAVE: 83.3% win rate (5/6 signals)
-   BNB: 80.0% win rate (4/5 signals)
-   DOGE: 66.7% win rate (8/12 signals)
-```
-
-#### Timing Analysis
-- Performance by hour of day
+- Overall statistics (win rate, profit factor, etc.)
 - Performance by day of week
-- Optimal trading windows
-- Time to target statistics
+- Performance by hour (UTC)
+- Performance by coin/symbol
+- Performance by month
+- Best combinations
+- Recommendations
 
-Example output:
+**Output files**:
+- `docs/analysis/DAVIDTECH_FULL_ANALYSIS_YYYYMMDD.md`
+- Console output with key findings
+
+**Example results**:
 ```
-⏰ Optimal Trading Hours:
-   05:00 UTC: 100% win rate
-   15:00 UTC: 85.7% win rate
-   22:00 UTC: 71.4% win rate
+Overall: 48.2% WR (388 wins / 361 losses)
+Best Hour: 05:00 UTC (59.1% WR, PF 4.45)
+Best Coin: LINKUSDT (61.8% WR)
+Best Day: Thursday (53.2% WR)
 ```
 
-#### Market Conditions
-- Performance during different volatility periods
-- Correlation with market trends
-- Volume analysis
-
-#### Profit Distribution
-- Risk/reward analysis
-- Profit ranges
-- Loss ranges
-- Statistical distributions
-
-#### Target Analysis
-- Which targets hit most often
-- Average time to each target
-- Target hit progression
-
-**When to use**: After running full_backtest.py to understand patterns
+**When to use**: After running `full_backtest.py` on DaviddTech signals
 
 ---
 
-### methodology_investigation.py 🔬
+### corrected_optimization.py �
 
-**Purpose**: Reverse engineer signal generation algorithm
+**Purpose**: Analyze LONG signal performance and find optimal patterns
 
 **Usage**:
 ```bash
-python methodology_investigation.py
+python corrected_optimization.py
 ```
 
 **What it does**:
-1. Analyze entry conditions
-2. Calculate risk/reward ratios
-3. Identify systematic patterns
-4. Discover algorithmic rules
-5. Study entry timing
+- Loads latest backtest results
+- Filters for LONG signals only
+- Analyzes performance by day/hour/coin/month
+- Identifies high-performance patterns (>60% WR)
+- Progressive filtering strategies
+- Perfect combinations (100% WR patterns)
 
-**Discoveries**:
+**Analysis output**:
+- Overall LONG statistics
+- Performance by day of week
+- Performance by hour (UTC)
+- Performance by coin/symbol
+- Performance by month
+- Best combinations
+- Filtered strategies (Conservative, Moderate, Aggressive, Ultra)
 
-#### Risk/Reward Structure
-- Average R/R for Target 1: 1.37x
-- Average R/R for Target 2: 3.22x
-- Average R/R for Target 3: 6.31x
+**Output files**:
+- `data/results/corrected_optimization_results.json`
+- Console output with recommendations
 
-#### Pattern Recognition
-- Systematic target progression
-- T2 ≈ 2.47 × T1
-- T3 ≈ 4.61 × T1
-- Most common R/R: 1.0 for Target 1
-
-#### Entry Analysis
-- Price patterns at entry
-- Volume conditions
-- Technical indicator correlations
-
-**Output**:
+**Example findings**:
 ```
-🎯 Meta Signals Algorithm Analysis:
-   Average R/R Target 1: 1.37
-   Average R/R Target 2: 3.22
-   Average R/R Target 3: 6.31
-   
-   Systematic Pattern: T2 ≈ 2.5 × T1
-   Most Common R/R: 1.0 for Target 1 (40% of signals)
+🟢 LONG SIGNALS (773 total)
+Overall: 50.6% WR (391/773)
+
+Best Days: Wed (60%), Sat (58%), Sun (55%)
+Best Hours: 01:00-03:00 UTC
+Best Coins: BNB (80% WR), FET (67% WR)
+AVOID: Thursday (33.3% WR - THE THURSDAY CURSE)
 ```
 
-**When to use**: 
-- Understanding signal methodology
-- Optimizing target placement
-- Developing similar strategies
+**When to use**: After backtesting to optimize LONG signal strategy
+
+---
+
+### short_optimization.py 🔴
+
+**Purpose**: Analyze SHORT signal performance and find optimal patterns
+
+**Usage**:
+```bash
+python short_optimization.py
+```
+
+**What it does**:
+- Loads latest backtest results
+- Filters for SHORT signals only
+- Analyzes performance by day/hour/coin/month
+- Identifies high-performance SHORT patterns
+- Progressive filtering strategies
+- Perfect combinations for SHORT positions
+
+**Analysis output**:
+- Overall SHORT statistics
+- Performance by day of week
+- Performance by hour (UTC)
+- Performance by coin/symbol
+- Performance by month
+- Best SHORT combinations
+- Filtered SHORT strategies
+
+**Output files**:
+- `data/results/short_optimization_results.json`
+- Console output with recommendations
+
+**Example findings**:
+```
+🔴 SHORT SIGNALS (216 total)
+Overall: 46.8% WR (101/216)
+
+Best Days: Mon, Wed, Sat, Sun
+Best Hours: 04:00, 06:00, 10:00, 18:00 UTC
+Best Coins: FET (73% WR), IMX (67% WR)
+AVOID: Thursday (22.2% WR), Friday (29.6% WR)
+```
+
+**When to use**: After backtesting to optimize SHORT signal strategy
+
+---
+
+### compare_long_short.py ⚖️
+
+**Purpose**: Compare LONG vs SHORT signal performance
+
+**Usage**:
+```bash
+python compare_long_short.py
+```
+
+**What it does**:
+- Loads latest backtest results
+- Separates LONG and SHORT signals
+- Compares performance metrics
+- Identifies which position type performs better
+- Analyzes differences in patterns
+- Recommends position type preferences
+
+**Analysis output**:
+- Side-by-side LONG vs SHORT comparison
+- Win rate comparison
+- Profit factor comparison
+- Average profit/loss comparison
+- Time to target comparison
+- Best coins for each position type
+- Best times for each position type
+
+**Output files**:
+- `data/results/long_vs_short_comparison.json`
+- Console output with comparison
+
+**Example findings**:
+```
+LONG:  773 signals, 50.6% WR, PF 1.42
+SHORT: 216 signals, 46.8% WR, PF 1.18
+
+LONG performs better on: Wed, Sat, Sun
+SHORT performs better on: Mon
+Both avoid: Thursday
+
+LONG best coins: BNB, FET, DOGE
+SHORT best coins: FET, IMX, RUNE
+```
+
+**When to use**: To understand which position types work best in different scenarios
+
+---
+
+### compare_october_november.py �
+
+**Purpose**: Compare performance across different time periods (October vs November)
+
+**Usage**:
+```bash
+python compare_october_november.py
+```
+
+**What it does**:
+- Loads latest backtest results
+- Separates signals by month (October, November)
+- Compares performance metrics month-over-month
+- Identifies temporal patterns
+- Analyzes if strategy effectiveness changes over time
+
+**Analysis output**:
+- Month-by-month performance comparison
+- Win rate trends
+- Profit factor trends
+- Volume of signals per month
+- Best performing months
+- Seasonal patterns
+
+**Output files**:
+- `data/results/month_comparison_results.json`
+- Console output with comparison
+
+**When to use**: To identify temporal patterns and validate strategy consistency
 
 ---
 
 ## Utility Scripts
 
-### setup.py
+### convert_telegram_signals.py 🔄
+
+**Purpose**: Convert signal formats between different structures
+
+**Usage**:
+```bash
+python convert_telegram_signals.py
+```
+
+**What it does**:
+- Reads Telegram signal exports
+- Converts to standard backtest format
+- Normalizes symbol names
+- Validates data integrity
+
+**When to use**: When signal format needs conversion for backtesting
+
+---
+
+### fix_symbols.py 🔧
+
+**Purpose**: Fix and normalize cryptocurrency symbol names
+
+**Usage**:
+```bash
+python fix_symbols.py
+```
+
+**What it does**:
+- Scans signal files for symbol inconsistencies
+- Normalizes symbol format (e.g., BTC → BTCUSDT)
+- Fixes common symbol errors
+- Validates Binance symbol availability
+
+**When to use**: When signals have incorrect or inconsistent symbol names
+
+---
+
+### check_telegram_channel.py ✅
+
+**Purpose**: Verify Telegram API access and channel connectivity
+
+**Usage**:
+```bash
+python check_telegram_channel.py
+```
+
+**What it does**:
+- Tests Telegram API credentials
+- Verifies channel access
+- Checks authentication
+- Validates session file
+
+**When to use**: Troubleshooting Telegram extraction issues
+
+---
+
+### setup.py 🛠️
 
 **Purpose**: Environment configuration and setup
 
@@ -302,13 +407,13 @@ python setup.py
 ```
 
 **What it does**:
-- Create directory structure
-- Validate Python version
-- Check dependencies
-- Create config templates
-- Initialize database
+- Creates directory structure
+- Validates Python version
+- Checks dependencies
+- Creates config templates
+- Initializes required folders
 
-**When to use**: First-time setup (or use setup.ps1/setup.sh)
+**When to use**: First-time setup
 
 ---
 

@@ -475,6 +475,6 @@ def load_latest_backtest(directory: str = "data/backtest_results") -> pd.DataFra
         raise FileNotFoundError(f"No backtest results found in {directory}")
     
     latest_file = detailed_files[-1]
-    print(f"📂 Loading: {latest_file.name}")
+    print(f"[Loading] {latest_file.name}")
     
     return pd.read_csv(latest_file)

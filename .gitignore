@@ -196,6 +196,7 @@ data/results/*.json
 # Cache and intermediate files (should not be tracked)
 data/cache/
 data/analysis/
+data/results/*.json
 data/backtest_results/intermediate_results_*.csv
 data/backtest_results/*_030*.csv
 data/backtest_results/*_030*.json
@@ -205,6 +206,10 @@ data/backtest_results/*_035*.csv
 data/backtest_results/*_035*.json
 data/backtest_results/*_195*.csv
 data/backtest_results/*_195*.json
+
+# Telegram session files (contains user credentials)
+*.session
+*.session-journal
 
 # Temporary files
 tmp/

@@ -2,6 +2,216 @@
 
 All notable changes to the BackTesting Signals project are documented in this file.
 
+## [2.1.0] - 2025-11-04
+
+### 🧹 Major Repository Reorganization
+
+**This release focuses on code cleanup, consolidation, and improved maintainability while preserving all features.**
+
+---
+
+### 🗂️ Repository Structure Improvements
+
+#### File Consolidation
+- **Extraction Scripts**: 5 → 2 files (60% reduction)
+  - Kept: `extract_telegram.py` (production Telegram extractor)
+  - Archived: `extract_signals.py`, `extract_all_signals.py`, `quick_extract.py`, `bulk_extract.py` → `archive/extraction_methods/`
+  
+- **Analysis Scripts**: 8 → 4 files (50% reduction)
+  - Removed original versions: `short_optimization.py`, `corrected_optimization.py`, `compare_long_short.py`, `compare_october_november.py`
+  - Renamed refactored versions to standard names (removed `_refactored` suffix)
+  - All analysis scripts now use shared `BacktestAnalyzer` class (54-62% code reduction)
+
+- **Documentation**: 11 → 3 root files (73% reduction)
+  - Root: `README.md`, `CHANGELOG.md`, `QUICK_START.md`
+  - Organized setup guides → `docs/setup/`
+  - Organized analysis reports → `docs/analysis/`
+  - Organized project docs → `docs/project/`
+
+#### Directory Structure
+- Created `archive/extraction_methods/` for old extraction scripts
+- Created `data/cache/` for session files and samples
+- Created `data/results/` for JSON analysis results
+- Created `docs/setup/`, `docs/analysis/`, `docs/project/` for organized documentation
+
+#### Session/Log/Result Files
+- Moved `signal_extractor.session` → `data/cache/`
+- Moved `signal_extraction.log` → `logs/`
+- Moved `telegram_messages_sample.json` → `data/cache/`
+- Moved `*_results.json` → `data/results/`
+
+---
+
+### ✨ New Features
+
+#### Telegram Integration (DaviddTech Channel)
+- **`extract_telegram.py`**: Production-ready Telegram extractor (242 lines)
+  - Telethon-based extraction
+  - DaviddTech signal format support
+  - 365-day historical extraction
+  - Extracted 805 signals successfully
+  - Configuration via `config/config.json`
+  - JSON and CSV export
+
+- **`src/data/telegram_client.py`**: Telegram client implementation (308 lines)
+  - Async Telethon integration
+  - Message pagination and filtering
+  - Date range support
+  - Automatic session management
+
+- **`src/parsers/davidtech_parser.py`**: DaviddTech format parser (177 lines)
+  - Custom Telegram format support
+  - Pattern matching for signals
+  - Entry/target/stop loss extraction
+
+#### Comprehensive Analysis Tools
+- **`analyze_davidtech.py`**: All-in-one optimization analysis
+  - Uses latest backtest results automatically
+  - Comprehensive pattern analysis
+  - Performance breakdowns by multiple dimensions
+  - Detailed markdown report generation
+  - Run on 805 DaviddTech signals achieving 48.2% WR
+
+- **`src/analytics/backtest_analyzer.py`**: Shared analysis class (489 lines)
+  - Eliminates code duplication across analysis scripts
+  - Consistent metrics calculation
+  - Day/hour/coin/month analysis methods
+  - Strategy filtering and recommendations
+  - Used by all 4 analysis scripts
+
+#### Utility Scripts
+- **`convert_telegram_signals.py`**: Signal format converter
+- **`fix_symbols.py`**: Symbol normalization utility
+- **`check_telegram_channel.py`**: Telegram channel verification
+
+---
+
+### 📊 DaviddTech Analysis Results
+
+**Full Historical Backtest (805 signals, 365 days):**
+- Overall: **48.2% WR** (388 wins / 361 losses, 56 invalidated)
+- LONG: **46.8% WR** (197/421 signals)
+- SHORT: **49.7% WR** (191/384 signals)
+- Profit Factor: **1.33**
+- Average Profit: **3.55%**
+- Best Trade: **24.18%**
+- Processing Time: 25 minutes 29 seconds
+
+**Top Performing Patterns:**
+- Best Days: Thursday (53.2% WR), Friday (51.1% WR)
+- Best Hours: 05:00 UTC (59.1% WR, PF 4.45), 03:00 UTC (57.6% WR)
+- Best Coins: LINKUSDT (61.8% WR), ADAUSDT (53.9% WR)
+- See `docs/analysis/DAVIDTECH_FULL_ANALYSIS_20251104.md` for complete details
+
+---
+
+### 🔄 Refactoring
+
+#### Analysis Scripts Refactored
+All analysis scripts now use shared `BacktestAnalyzer` class:
+- `short_optimization.py`: 475 → 217 lines (54% reduction)
+- `corrected_optimization.py`: Refactored with BacktestAnalyzer
+- `compare_long_short.py`: Refactored with BacktestAnalyzer
+- `compare_october_november.py`: Refactored with BacktestAnalyzer
+
+**Benefits:**
+- Eliminated duplicate analysis code
+- Consistent metric calculations
+- Easier maintenance and updates
+- Cleaner, more readable code
+
+---
+
+### 📝 Documentation Updates
+
+#### New Documentation
+- **`REPOSITORY_REORGANIZATION_PLAN.md`**: Complete reorganization details
+  - Rationale for all changes
+  - File-by-file breakdown
+  - Implementation phases
+  - Migration notes
+
+#### Updated Documentation
+- **`README.md`**: Updated for new structure
+  - Current script list and purposes
+  - New directory structure
+  - Updated command examples
+  - Telegram extraction instructions
+  - Version 2.1 release notes
+
+#### Organized Documentation
+- `docs/setup/telegram_setup.md` (was `TELEGRAM_SETUP.md`)
+- `docs/setup/discord_token.md` (was `GET_DISCORD_TOKEN.md`)
+- `docs/setup/discord_bot.md` (was `CREATE_DISCORD_BOT.md`)
+- `docs/analysis/DAVIDTECH_FULL_ANALYSIS_20251104.md` (new)
+- `docs/analysis/DAVIDTECH_VS_METASIGNALS_COMPARISON.md` (new)
+- `docs/analysis/FINAL_TRADING_STRATEGIES.md` (moved)
+- `docs/project/PROJECT_V2_COMPLETE.md` (moved)
+- `docs/project/GIT_COMMITS_V2.md` (moved)
+
+---
+
+### 🎯 Impact Summary
+
+**File Count Reduction:**
+- Root Python files: ~25 → ~12 files (52% reduction)
+- Extraction scripts: 5 → 2 files (60% reduction)
+- Analysis scripts: 8 → 4 files (50% reduction)
+- Root documentation: 11 → 3 files (73% reduction)
+- Root session/logs: 6 → 0 files (100% organized)
+
+**Code Quality:**
+- Eliminated duplicate code via `BacktestAnalyzer` class
+- Consistent analysis methodology across all scripts
+- Better organized directory structure
+- Cleaner root directory with only essential files
+- All features preserved, zero functionality loss
+
+**Maintainability:**
+- Single source of truth for analysis logic
+- Clear separation of concerns
+- Logical file organization
+- Easier to navigate and understand
+- Reduced cognitive load for developers
+
+---
+
+### ⚠️ Breaking Changes
+
+**File Locations Changed:**
+- Session files moved to `data/cache/` (scripts auto-create there)
+- Log files moved to `logs/`
+- Result files moved to `data/results/`
+- Documentation organized in `docs/` subdirectories
+
+**Scripts Archived:**
+- `extract_signals.py`, `extract_all_signals.py`, `quick_extract.py`, `bulk_extract.py`
+- Available in `archive/extraction_methods/` for reference
+- Use `extract_telegram.py` for production extraction
+
+**Scripts Renamed:**
+- All `*_refactored.py` scripts renamed to standard names
+- Original (non-refactored) versions deleted
+
+---
+
+### 🔧 Technical Details
+
+**Dependencies:**
+- Added `telethon` for Telegram extraction
+- All other dependencies unchanged
+
+**Configuration:**
+- `config/config.json` now includes Telegram section
+- Backward compatible with existing Discord configuration
+
+**Git History:**
+- Created backup branch: `pre-reorganization-backup`
+- All file moves tracked in git history
+- Easy rollback if needed
+
+---
+
 ## [2.0.0] - 2025-10-13
 
 ### 🎉 Major Release - Project Cleanup & Optimization Strategies

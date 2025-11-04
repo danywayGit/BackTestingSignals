@@ -59,17 +59,21 @@ Edit `config/config.json` with your credentials:
 
 ## 🚀 Usage
 
-### 1. Extract Signals from Discord
+### 1. Extract Signals
 
+#### From Telegram (DaviddTech Channel)
 ```bash
-# Extract all signals from a Discord channel
-python extract_signals.py
-
-# Bulk extract with custom date range
-python bulk_extract.py
+# Extract signals from Telegram
+python extract_telegram.py
 ```
 
-Extracted signals are saved to `data/signals/meta_signals_YYYYMMDD_HHMMSS.csv`
+#### From Discord (Meta Signals)
+```bash
+# Discord extraction scripts archived - see archive/extraction_methods/
+# Multiple methods available for reference
+```
+
+Extracted signals are saved to `data/signals/`
 
 ### 2. Run Backtest
 
@@ -78,22 +82,25 @@ Extracted signals are saved to `data/signals/meta_signals_YYYYMMDD_HHMMSS.csv`
 python full_backtest.py
 
 # Backtest specific file
-python full_backtest.py data/signals/meta_signals_20251013_195448.csv
+python full_backtest.py data/signals/telegram_signals_export_20251104_043620.csv
 ```
 
 Results saved to `data/backtest_results/`
 
-### 3. Optimize Strategies
+### 3. Analyze & Optimize
 
 ```bash
-# Analyze LONG signals (finds best days/hours/coins)
-python corrected_optimization.py
+# Comprehensive optimization analysis (DaviddTech signals)
+python analyze_davidtech.py
 
-# Analyze SHORT signals
-python short_optimization.py
+# Individual optimization analyses
+python corrected_optimization.py    # LONG signal optimization
+python short_optimization.py        # SHORT signal optimization
+python compare_long_short.py        # Compare LONG vs SHORT performance
+python compare_october_november.py  # Monthly performance comparison
 ```
 
-Results saved as JSON files with detailed breakdowns.
+Results saved to `data/results/` with detailed breakdowns.
 
 ---
 
@@ -134,43 +141,69 @@ After backtesting 989 signals, we identified optimal strategies:
 
 ```
 BackTestingSignals/
-├── extract_signals.py          # Main signal extraction tool
-├── bulk_extract.py             # Batch extraction utility
+├── extract_telegram.py         # Telegram signal extraction (DaviddTech)
 ├── full_backtest.py            # Backtesting engine
-├── corrected_optimization.py   # LONG signal analysis
-├── short_optimization.py       # SHORT signal analysis
+├── analyze_davidtech.py        # Comprehensive optimization analysis
+├── corrected_optimization.py   # LONG signal optimization
+├── short_optimization.py       # SHORT signal optimization
+├── compare_long_short.py       # Compare LONG vs SHORT
+├── compare_october_november.py # Monthly comparison
+├── convert_telegram_signals.py # Signal format converter
+├── fix_symbols.py              # Symbol fixing utility
+├── check_telegram_channel.py   # Telegram channel verification
 ├── setup.py                    # Setup wizard
 │
 ├── src/                        # Core modules
 │   ├── parsers/               # Signal format parsers
-│   │   ├── discord_parser.py  # Meta Signals parser (LONG/SHORT detection)
-│   │   └── base_parser.py     # Base parser interface
+│   │   ├── davidtech_parser.py # DaviddTech Telegram format
+│   │   ├── discord_parser.py   # Meta Signals Discord format
+│   │   └── base_parser.py      # Base parser interface
 │   ├── backtesting/           # Backtesting logic
+│   │   ├── engine.py          # Core backtest engine
 │   │   └── signal_backtester.py
 │   ├── data/                  # Data management
-│   │   ├── binance_data.py    # Binance API + caching
+│   │   ├── telegram_client.py # Telegram extraction (Telethon)
 │   │   ├── discord_client.py  # Discord message extraction
+│   │   ├── binance_data.py    # Binance API + caching
 │   │   └── storage.py         # SQLite database + CSV exports
 │   └── analytics/             # Analysis tools
-│       └── image_processor.py # OCR for signal images
+│       └── backtest_analyzer.py # Shared analysis class
 │
 ├── config/                    # Configuration files
 │   └── config.json           # API keys, settings
 │
 ├── data/                      # Data storage
-│   ├── signals/              # Extracted signals (CSV)
+│   ├── signals/              # Extracted signals (CSV/JSON)
 │   ├── backtest_results/     # Backtest outputs
-│   ├── cache/                # Binance price data cache
-│   └── signals.db            # SQLite database
+│   ├── cache/                # Cached data (sessions, samples)
+│   └── results/              # Analysis results (JSON)
 │
 ├── docs/                      # Documentation
+│   ├── setup/                # Setup guides
+│   │   ├── telegram_setup.md
+│   │   ├── discord_token.md
+│   │   └── discord_bot.md
+│   ├── analysis/             # Analysis reports
+│   │   ├── DAVIDTECH_FULL_ANALYSIS_20251104.md
+│   │   ├── DAVIDTECH_VS_METASIGNALS_COMPARISON.md
+│   │   └── FINAL_TRADING_STRATEGIES.md
+│   ├── project/              # Project documentation
+│   │   ├── PROJECT_V2_COMPLETE.md
+│   │   └── GIT_COMMITS_V2.md
 │   ├── installation.md       # Detailed install guide
 │   ├── usage.md             # Usage examples
-│   └── discord-token-guide.md # How to get Discord token
+│   └── SCRIPT_REFERENCE.md  # Script documentation
 │
-├── FINAL_TRADING_STRATEGIES.md # Complete strategy guide
-├── CHANGELOG.md               # Project history
-└── README.md                  # This file
+├── archive/                   # Archived code
+│   └── extraction_methods/   # Old extraction scripts
+│
+├── logs/                      # Log files
+├── tests/                     # Test files
+│
+├── README.md                  # This file
+├── CHANGELOG.md               # Version history
+├── QUICK_START.md             # Quick start guide
+└── REPOSITORY_REORGANIZATION_PLAN.md # Reorganization details
 ```
 
 ---
@@ -260,11 +293,20 @@ For each signal:
 
 ## 📚 Documentation
 
+- **Quick Start:** `QUICK_START.md` - Get started in 5 minutes
 - **Installation:** `docs/installation.md` - Detailed setup instructions
 - **Usage:** `docs/usage.md` - Examples and workflows
-- **Discord Token:** `docs/discord-token-guide.md` - How to get your token
-- **Trading Strategies:** `FINAL_TRADING_STRATEGIES.md` - Complete guide
+- **Script Reference:** `docs/SCRIPT_REFERENCE.md` - All scripts documented
+- **Setup Guides:**
+  - `docs/setup/telegram_setup.md` - Telegram API setup
+  - `docs/setup/discord_token.md` - Discord token extraction
+  - `docs/setup/discord_bot.md` - Discord bot creation
+- **Analysis Reports:**
+  - `docs/analysis/DAVIDTECH_FULL_ANALYSIS_20251104.md` - Complete DaviddTech analysis
+  - `docs/analysis/DAVIDTECH_VS_METASIGNALS_COMPARISON.md` - Channel comparison
+  - `docs/analysis/FINAL_TRADING_STRATEGIES.md` - Trading strategies
 - **Changelog:** `CHANGELOG.md` - Version history and updates
+- **Reorganization:** `REPOSITORY_REORGANIZATION_PLAN.md` - Project cleanup details
 
 ---
 
@@ -349,24 +391,29 @@ For questions, issues, or suggestions:
 python setup.py                          # Initial setup wizard
 
 # Extract signals
-python extract_signals.py                # Extract from Discord
-python bulk_extract.py                   # Batch extraction
+python extract_telegram.py               # Extract from Telegram (DaviddTech)
 
 # Backtest
 python full_backtest.py                  # Interactive backtest
 python full_backtest.py <csv_file>       # Backtest specific file
 
-# Optimize
+# Comprehensive analysis
+python analyze_davidtech.py              # Full optimization analysis
+
+# Individual analyses
 python corrected_optimization.py         # Analyze LONG signals
 python short_optimization.py             # Analyze SHORT signals
+python compare_long_short.py             # Compare LONG vs SHORT
+python compare_october_november.py       # Monthly comparison
 
 # Utilities
-python quick_extract.py                  # Quick signal extraction
-python test_parser.py                    # Test parser on samples
+python convert_telegram_signals.py       # Convert signal formats
+python fix_symbols.py                    # Fix symbol formatting
+python check_telegram_channel.py         # Verify Telegram access
 ```
 
 ---
 
-**Version:** 2.0  
-**Last Updated:** October 13, 2025  
+**Version:** 2.1  
+**Last Updated:** November 4, 2025  
 **Status:** Production Ready ✅

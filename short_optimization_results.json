@@ -1,0 +1,572 @@
+{
+  "timestamp": "2025-11-04T05:28:40.603588",
+  "total_short_signals": 384,
+  "overall_short_wr": 0.47395833333333326,
+  "overall_short_wins": 182,
+  "overall_short_losses": 179,
+  "by_day": [
+    {
+      "total": 108,
+      "wins": 53,
+      "losses": 49,
+      "win_rate": 49.074074074074076,
+      "avg_profit": 5.195813320152479,
+      "avg_loss": 3.805249348674535,
+      "profit_factor": 1.4768969997314239,
+      "day": "Monday"
+    },
+    {
+      "total": 63,
+      "wins": 23,
+      "losses": 38,
+      "win_rate": 36.507936507936506,
+      "avg_profit": 4.517390843780714,
+      "avg_loss": 4.186746666358059,
+      "profit_factor": 0.6530632172043748,
+      "day": "Tuesday"
+    },
+    {
+      "total": 44,
+      "wins": 18,
+      "losses": 22,
+      "win_rate": 40.909090909090914,
+      "avg_profit": 5.2819000557224705,
+      "avg_loss": 4.347949626629705,
+      "profit_factor": 0.9939293143088902,
+      "day": "Wednesday"
+    },
+    {
+      "total": 57,
+      "wins": 28,
+      "losses": 24,
+      "win_rate": 49.122807017543856,
+      "avg_profit": 5.644369921627866,
+      "avg_loss": 3.482017028096156,
+      "profit_factor": 1.8911734746741535,
+      "day": "Thursday"
+    },
+    {
+      "total": 61,
+      "wins": 33,
+      "losses": 25,
+      "win_rate": 54.09836065573771,
+      "avg_profit": 6.211679710965393,
+      "avg_loss": 4.092169745313399,
+      "profit_factor": 2.0036845313821083,
+      "day": "Friday"
+    },
+    {
+      "total": 15,
+      "wins": 5,
+      "losses": 8,
+      "win_rate": 33.33333333333333,
+      "avg_profit": 4.082092818281323,
+      "avg_loss": 3.70716978015599,
+      "profit_factor": 0.6882091090304672,
+      "day": "Saturday"
+    },
+    {
+      "total": 36,
+      "wins": 22,
+      "losses": 13,
+      "win_rate": 61.111111111111114,
+      "avg_profit": 4.7333994855064185,
+      "avg_loss": 3.753436436095848,
+      "profit_factor": 2.1341425375035263,
+      "day": "Sunday"
+    }
+  ],
+  "by_hour": [
+    {
+      "total": 16,
+      "wins": 8,
+      "losses": 6,
+      "win_rate": 50.0,
+      "avg_profit": 4.407593781782959,
+      "avg_loss": 4.40031652610125,
+      "profit_factor": 1.335538403699989,
+      "hour": 0
+    },
+    {
+      "total": 10,
+      "wins": 5,
+      "losses": 3,
+      "win_rate": 50.0,
+      "avg_profit": 6.049432423987964,
+      "avg_loss": 3.8342521235489446,
+      "profit_factor": 2.6295577464481177,
+      "hour": 1
+    },
+    {
+      "total": 14,
+      "wins": 7,
+      "losses": 6,
+      "win_rate": 50.0,
+      "avg_profit": 5.512051894909191,
+      "avg_loss": 3.0504655431023484,
+      "profit_factor": 2.1081133747825542,
+      "hour": 2
+    },
+    {
+      "total": 15,
+      "wins": 8,
+      "losses": 6,
+      "win_rate": 53.333333333333336,
+      "avg_profit": 9.188900553337046,
+      "avg_loss": 4.269197618010462,
+      "profit_factor": 2.869829064075752,
+      "hour": 3
+    },
+    {
+      "total": 13,
+      "wins": 7,
+      "losses": 6,
+      "win_rate": 53.84615384615385,
+      "avg_profit": 4.541359916733307,
+      "avg_loss": 5.85735225803797,
+      "profit_factor": 0.9045474819989069,
+      "hour": 4
+    },
+    {
+      "total": 10,
+      "wins": 6,
+      "losses": 3,
+      "win_rate": 60.0,
+      "avg_profit": 4.160787001780746,
+      "avg_loss": 3.2669375783358134,
+      "profit_factor": 2.547209367802039,
+      "hour": 5
+    },
+    {
+      "total": 13,
+      "wins": 5,
+      "losses": 6,
+      "win_rate": 38.46153846153847,
+      "avg_profit": 4.668602665651283,
+      "avg_loss": 4.676111696708486,
+      "profit_factor": 0.8319951433398378,
+      "hour": 6
+    },
+    {
+      "total": 12,
+      "wins": 5,
+      "losses": 7,
+      "win_rate": 41.66666666666667,
+      "avg_profit": 6.196976381296187,
+      "avg_loss": 5.011140587090584,
+      "profit_factor": 0.8833142124028446,
+      "hour": 7
+    },
+    {
+      "total": 19,
+      "wins": 11,
+      "losses": 7,
+      "win_rate": 57.89473684210527,
+      "avg_profit": 4.986679193364423,
+      "avg_loss": 6.671748665881124,
+      "profit_factor": 1.1745361753621042,
+      "hour": 8
+    },
+    {
+      "total": 18,
+      "wins": 6,
+      "losses": 9,
+      "win_rate": 33.33333333333333,
+      "avg_profit": 6.013311189593723,
+      "avg_loss": 4.630847349417582,
+      "profit_factor": 0.8656891112811155,
+      "hour": 9
+    },
+    {
+      "total": 12,
+      "wins": 5,
+      "losses": 7,
+      "win_rate": 41.66666666666667,
+      "avg_profit": 4.701942096170612,
+      "avg_loss": 4.318140981606406,
+      "profit_factor": 0.7777722133203434,
+      "hour": 10
+    },
+    {
+      "total": 10,
+      "wins": 4,
+      "losses": 6,
+      "win_rate": 40.0,
+      "avg_profit": 5.039817569719378,
+      "avg_loss": 3.9758435747525653,
+      "profit_factor": 0.8450730811314725,
+      "hour": 11
+    },
+    {
+      "total": 19,
+      "wins": 7,
+      "losses": 9,
+      "win_rate": 36.84210526315789,
+      "avg_profit": 5.692034075751683,
+      "avg_loss": 3.587484600638547,
+      "profit_factor": 1.234050625244644,
+      "hour": 12
+    },
+    {
+      "total": 16,
+      "wins": 7,
+      "losses": 8,
+      "win_rate": 43.75,
+      "avg_profit": 5.37443364155889,
+      "avg_loss": 3.364295227274593,
+      "profit_factor": 1.397805221800828,
+      "hour": 13
+    },
+    {
+      "total": 13,
+      "wins": 6,
+      "losses": 5,
+      "win_rate": 46.15384615384615,
+      "avg_profit": 4.641715550642612,
+      "avg_loss": 3.8839098550739677,
+      "profit_factor": 1.4341369569879099,
+      "hour": 14
+    },
+    {
+      "total": 19,
+      "wins": 10,
+      "losses": 8,
+      "win_rate": 52.63157894736842,
+      "avg_profit": 4.911089838952551,
+      "avg_loss": 3.1638049819669067,
+      "profit_factor": 1.9403415614050326,
+      "hour": 15
+    },
+    {
+      "total": 24,
+      "wins": 9,
+      "losses": 15,
+      "win_rate": 37.5,
+      "avg_profit": 5.372882066250322,
+      "avg_loss": 3.6028347978576747,
+      "profit_factor": 0.8947757587073084,
+      "hour": 16
+    },
+    {
+      "total": 18,
+      "wins": 8,
+      "losses": 10,
+      "win_rate": 44.44444444444444,
+      "avg_profit": 6.407085738585154,
+      "avg_loss": 3.401115222308313,
+      "profit_factor": 1.5070552615354702,
+      "hour": 17
+    },
+    {
+      "total": 24,
+      "wins": 11,
+      "losses": 13,
+      "win_rate": 45.83333333333333,
+      "avg_profit": 5.434150562461759,
+      "avg_loss": 2.9515864508127203,
+      "profit_factor": 1.5578494737093023,
+      "hour": 18
+    },
+    {
+      "total": 20,
+      "wins": 10,
+      "losses": 9,
+      "win_rate": 50.0,
+      "avg_profit": 5.526890701753634,
+      "avg_loss": 3.0125171695073094,
+      "profit_factor": 2.0384911763405795,
+      "hour": 19
+    },
+    {
+      "total": 25,
+      "wins": 15,
+      "losses": 9,
+      "win_rate": 60.0,
+      "avg_profit": 4.378026172729288,
+      "avg_loss": 3.5753019700658695,
+      "profit_factor": 2.040865456672941,
+      "hour": 20
+    },
+    {
+      "total": 14,
+      "wins": 8,
+      "losses": 5,
+      "win_rate": 57.14285714285714,
+      "avg_profit": 5.545260977239989,
+      "avg_loss": 4.831844629250166,
+      "profit_factor": 1.8362381749350365,
+      "hour": 21
+    },
+    {
+      "total": 22,
+      "wins": 10,
+      "losses": 12,
+      "win_rate": 45.45454545454545,
+      "avg_profit": 4.372765560603568,
+      "avg_loss": 4.1668814131452505,
+      "profit_factor": 0.8745080407153769,
+      "hour": 22
+    },
+    {
+      "total": 8,
+      "wins": 4,
+      "losses": 4,
+      "win_rate": 50.0,
+      "avg_profit": 3.948403056726904,
+      "avg_loss": 2.340213612673999,
+      "profit_factor": 1.687197713637491,
+      "hour": 23
+    }
+  ],
+  "by_coin": [
+    {
+      "total": 22,
+      "wins": 12,
+      "losses": 10,
+      "win_rate": 54.54545454545454,
+      "avg_profit": 3.481159425066499,
+      "avg_loss": 3.1156595642329448,
+      "profit_factor": 1.3407727076588503,
+      "symbol": "LINKUSDT"
+    },
+    {
+      "total": 75,
+      "wins": 39,
+      "losses": 30,
+      "win_rate": 52.0,
+      "avg_profit": 5.24357480235507,
+      "avg_loss": 4.582458909947787,
+      "profit_factor": 1.4875522895063473,
+      "symbol": "SOLUSDT"
+    },
+    {
+      "total": 61,
+      "wins": 31,
+      "losses": 30,
+      "win_rate": 50.81967213114754,
+      "avg_profit": 3.35324889398561,
+      "avg_loss": 3.3115234835412437,
+      "profit_factor": 1.0463534002824197,
+      "symbol": "ETHUSDT"
+    },
+    {
+      "total": 30,
+      "wins": 15,
+      "losses": 14,
+      "win_rate": 50.0,
+      "avg_profit": 5.713460254383434,
+      "avg_loss": 5.181235898899682,
+      "profit_factor": 1.1814873280654865,
+      "symbol": "NEARUSDT"
+    },
+    {
+      "total": 70,
+      "wins": 34,
+      "losses": 36,
+      "win_rate": 48.57142857142857,
+      "avg_profit": 7.402547453478678,
+      "avg_loss": 4.879601711880367,
+      "profit_factor": 1.4327593172517747,
+      "symbol": "RUNEUSDT"
+    },
+    {
+      "total": 50,
+      "wins": 24,
+      "losses": 23,
+      "win_rate": 48.0,
+      "avg_profit": 6.371833682782094,
+      "avg_loss": 3.5912258479276256,
+      "profit_factor": 1.8514207157693559,
+      "symbol": "ADAUSDT"
+    },
+    {
+      "total": 28,
+      "wins": 10,
+      "losses": 10,
+      "win_rate": 35.714285714285715,
+      "avg_profit": 6.938780223460839,
+      "avg_loss": 5.409527218494099,
+      "profit_factor": 1.282696240022331,
+      "symbol": "DOGEUSDT"
+    },
+    {
+      "total": 48,
+      "wins": 17,
+      "losses": 26,
+      "win_rate": 35.41666666666667,
+      "avg_profit": 3.0588802033190223,
+      "avg_loss": 2.0254103485993493,
+      "profit_factor": 0.9874725175564487,
+      "symbol": "BTCUSDT"
+    }
+  ],
+  "by_month": [
+    {
+      "total": 27,
+      "wins": 10,
+      "losses": 14,
+      "win_rate": 37.03703703703704,
+      "avg_profit": 5.263290917337782,
+      "avg_loss": 4.278110623884711,
+      "profit_factor": 0.8787742634318199,
+      "month": "November"
+    },
+    {
+      "total": 22,
+      "wins": 11,
+      "losses": 10,
+      "win_rate": 50.0,
+      "avg_profit": 6.969091373004806,
+      "avg_loss": 4.472791330582579,
+      "profit_factor": 1.7139186569892573,
+      "month": "October"
+    },
+    {
+      "total": 27,
+      "wins": 10,
+      "losses": 15,
+      "win_rate": 37.03703703703704,
+      "avg_profit": 5.244492403179773,
+      "avg_loss": 3.453735495931117,
+      "profit_factor": 1.0123323783496385,
+      "month": "September"
+    },
+    {
+      "total": 18,
+      "wins": 2,
+      "losses": 11,
+      "win_rate": 11.11111111111111,
+      "avg_profit": 5.4383565385938315,
+      "avg_loss": 4.488486897438907,
+      "profit_factor": 0.2202951953564458,
+      "month": "August"
+    },
+    {
+      "total": 18,
+      "wins": 9,
+      "losses": 8,
+      "win_rate": 50.0,
+      "avg_profit": 5.1566145936313665,
+      "avg_loss": 3.6569019836096928,
+      "profit_factor": 1.5863677626133659,
+      "month": "July"
+    },
+    {
+      "total": 30,
+      "wins": 17,
+      "losses": 12,
+      "win_rate": 56.666666666666664,
+      "avg_profit": 5.444153175157032,
+      "avg_loss": 3.2195163509882097,
+      "profit_factor": 2.395561783404251,
+      "month": "June"
+    },
+    {
+      "total": 26,
+      "wins": 13,
+      "losses": 9,
+      "win_rate": 50.0,
+      "avg_profit": 3.897970509681471,
+      "avg_loss": 3.7610992785775483,
+      "profit_factor": 1.4970096321007258,
+      "month": "May"
+    },
+    {
+      "total": 20,
+      "wins": 7,
+      "losses": 12,
+      "win_rate": 35.0,
+      "avg_profit": 5.891715284271066,
+      "avg_loss": 3.982205747683221,
+      "profit_factor": 0.8630478015417158,
+      "month": "April"
+    },
+    {
+      "total": 29,
+      "wins": 13,
+      "losses": 15,
+      "win_rate": 44.827586206896555,
+      "avg_profit": 4.5512484150478585,
+      "avg_loss": 3.8235112321377,
+      "profit_factor": 1.0316212124310096,
+      "month": "March"
+    },
+    {
+      "total": 59,
+      "wins": 27,
+      "losses": 31,
+      "win_rate": 45.76271186440678,
+      "avg_profit": 5.819976959643206,
+      "avg_loss": 3.780235313795624,
+      "profit_factor": 1.3409250403428825,
+      "month": "February"
+    },
+    {
+      "total": 52,
+      "wins": 32,
+      "losses": 17,
+      "win_rate": 61.53846153846154,
+      "avg_profit": 4.895139054382842,
+      "avg_loss": 4.146473858326739,
+      "profit_factor": 2.222220544808572,
+      "month": "January"
+    },
+    {
+      "total": 56,
+      "wins": 31,
+      "losses": 25,
+      "win_rate": 55.35714285714286,
+      "avg_profit": 5.338224840331098,
+      "avg_loss": 4.207060947909004,
+      "profit_factor": 1.573402164592015,
+      "month": "December"
+    }
+  ],
+  "strategy_tiers": {
+    "tier1_best_days": {
+      "total": 262,
+      "wins": 136,
+      "losses": 111,
+      "win_rate": 51.908396946564885,
+      "avg_profit": 5.459857962622505,
+      "avg_loss": 3.793914811364333,
+      "profit_factor": 1.7632329755834082
+    },
+    "tier2_days_hours": {
+      "total": 83,
+      "wins": 51,
+      "losses": 26,
+      "win_rate": 61.44578313253012,
+      "avg_profit": 5.4888548941715785,
+      "avg_loss": 4.282965934266139,
+      "profit_factor": 2.513818729815783
+    },
+    "tier3_best_coins": {
+      "total": 384,
+      "wins": 182,
+      "losses": 179,
+      "win_rate": 47.39583333333333,
+      "avg_profit": 5.285304051747408,
+      "avg_loss": 3.941526074917031,
+      "profit_factor": 1.3634020083691274
+    },
+    "tier4_days_coins": {
+      "total": 262,
+      "wins": 136,
+      "losses": 111,
+      "win_rate": 51.908396946564885,
+      "avg_profit": 5.459857962622505,
+      "avg_loss": 3.793914811364333,
+      "profit_factor": 1.7632329755834082
+    },
+    "tier5_ultra_filtered": {
+      "total": 83,
+      "wins": 51,
+      "losses": 26,
+      "win_rate": 61.44578313253012,
+      "avg_profit": 5.4888548941715785,
+      "avg_loss": 4.282965934266139,
+      "profit_factor": 2.513818729815783
+    }
+  }
+}

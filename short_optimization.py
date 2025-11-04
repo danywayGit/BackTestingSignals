@@ -4,8 +4,14 @@ Uses shared BacktestAnalyzer to avoid code duplication
 """
 
 import json
+import sys
 from datetime import datetime
 from src.analytics import BacktestAnalyzer, load_latest_backtest
+
+# Fix Windows console encoding for emojis
+if sys.platform == 'win32':
+    import io
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 # Load latest backtest results
 df = load_latest_backtest()
