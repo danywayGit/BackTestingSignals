@@ -26,29 +26,38 @@ print("📊 LONG & SHORT OPTIMIZATION ANALYSIS")
 print("=" * 80)
 print()
 
-# Find latest backtest results
+# Find backtest file - either from command line argument or latest
 from pathlib import Path
-results_dir = Path('data/backtest_results')
-detailed_files = sorted(results_dir.glob('*_backtest_detailed_*.csv'), key=lambda x: x.stat().st_mtime, reverse=True)
 
-if not detailed_files:
-    print("❌ No backtest results found in data/backtest_results/")
-    print("   Please run full_backtest.py first")
-    sys.exit(1)
+if len(sys.argv) > 1:
+    # Use specified file
+    backtest_file = Path(sys.argv[1])
+    if not backtest_file.exists():
+        print(f"❌ File not found: {backtest_file}")
+        sys.exit(1)
+else:
+    # Find latest backtest results
+    results_dir = Path('data/backtest_results')
+    detailed_files = sorted(results_dir.glob('*_backtest_detailed_*.csv'), key=lambda x: x.stat().st_mtime, reverse=True)
 
-# Find latest file with actual data (more than 1 line)
-backtest_file = None
-for file in detailed_files:
-    try:
-        test_df = pd.read_csv(file)
-        if len(test_df) > 10:  # Need at least 10 signals
-            backtest_file = file
-            break
-    except:
-        continue
+    if not detailed_files:
+        print("❌ No backtest results found in data/backtest_results/")
+        print("   Please run full_backtest.py first")
+        sys.exit(1)
 
-if not backtest_file:
-    print("❌ No backtest results with sufficient data found")
+    # Find latest file with actual data (more than 1 line)
+    backtest_file = None
+    for file in detailed_files:
+        try:
+            test_df = pd.read_csv(file)
+            if len(test_df) > 10:  # Need at least 10 signals
+                backtest_file = file
+                break
+        except:
+            continue
+
+    if not backtest_file:
+        print("❌ No backtest results with sufficient data found")
     sys.exit(1)
 
 print(f"📂 Loading backtest results: {backtest_file.name}")
@@ -398,14 +407,21 @@ output = {
     'filtered_short_signals': short_filtered_stats['total'] if short_analyzer and short_filtered_analyzer else 0,
 }
 
-with open('long_short_optimization_results.json', 'w') as f:
+# Create output filename based on input file
+output_filename = 'long_short_optimization_results.json'
+if len(sys.argv) > 1:
+    # Extract base name from input file
+    input_base = Path(sys.argv[1]).stem.replace('_backtest_detailed', '')
+    output_filename = f'long_short_optimization_{input_base}.json'
+
+with open(output_filename, 'w') as f:
     json.dump(output, f, indent=2)
 
 print("=" * 80)
 print("✅ ANALYSIS COMPLETE")
 print("=" * 80)
 print()
-print("📝 Results saved to: long_short_optimization_results.json")
+print(f"📝 Results saved to: {output_filename}")
 print()
 print("🔄 NEXT STEPS:")
 print("1. Use LONG rules for entry when signal direction is LONG")
