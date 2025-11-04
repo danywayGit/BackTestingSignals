@@ -446,9 +446,19 @@ def main():
     
     # Check for command line argument for signals file
     signals_file = sys.argv[1] if len(sys.argv) > 1 else None
+    
+    # Derive output filename prefix from input signal file
+    output_prefix = "meta_signals_backtest"  # default
     if signals_file:
         print(f"📂 Using signal file: {signals_file}")
         backtester.load_signals(signals_file)
+        
+        # Extract base filename without path and extension
+        import os
+        base_name = os.path.splitext(os.path.basename(signals_file))[0]
+        # Remove common suffixes like '_backtest', '_export', etc.
+        base_name = base_name.replace('_backtest', '').replace('_export', '')
+        output_prefix = f"{base_name}_backtest"
     
     # Ask user for test size
     response = input(f"Test all {len(backtester.signals_df) if backtester.signals_df is not None else 989} signals? (y/n) or enter number: ").strip().lower()
@@ -472,8 +482,8 @@ def main():
     # Run backtesting
     backtester.run_full_backtest(max_signals=max_signals)
     
-    # Calculate and save results
-    backtester.save_full_results()
+    # Calculate and save results with custom prefix
+    backtester.save_full_results(filename_prefix=output_prefix)
     
     # Print final report
     backtester.print_final_report()
