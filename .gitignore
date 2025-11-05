@@ -216,6 +216,7 @@ tmp/
 temp/
 *.tmp
 *.bak
+test_*.txt
 
 # Database files
 *.db
