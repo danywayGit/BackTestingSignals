@@ -1,7 +1,7 @@
 """Signal parsers package"""
 
 from .base_parser import SignalParser, Signal
-from .telegram_parser import TelegramSignalParser
 from .discord_parser import DiscordMetaSignalsParser
+from .davidtech_parser import DaviddTechParser
 
-__all__ = ['SignalParser', 'Signal', 'TelegramSignalParser', 'DiscordMetaSignalsParser']
+__all__ = ['SignalParser', 'Signal', 'DiscordMetaSignalsParser', 'DaviddTechParser']
