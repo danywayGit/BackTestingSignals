@@ -148,7 +148,6 @@ BackTestingSignals/
 ├── short_optimization.py       # SHORT signal optimization
 ├── compare_long_short.py       # Compare LONG vs SHORT
 ├── compare_october_november.py # Monthly comparison
-├── convert_telegram_signals.py # Signal format converter
 ├── fix_symbols.py              # Symbol fixing utility
 ├── check_telegram_channel.py   # Telegram channel verification
 ├── setup.py                    # Setup wizard
@@ -407,7 +406,6 @@ python compare_long_short.py             # Compare LONG vs SHORT
 python compare_october_november.py       # Monthly comparison
 
 # Utilities
-python convert_telegram_signals.py       # Convert signal formats
 python fix_symbols.py                    # Fix symbol formatting
 python check_telegram_channel.py         # Verify Telegram access
 ```

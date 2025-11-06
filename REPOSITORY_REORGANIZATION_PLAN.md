@@ -195,7 +195,6 @@ These files are production-ready and well-organized:
 ### Main Scripts
 - ✅ `full_backtest.py` - Complete backtesting engine
 - ✅ `analyze_davidtech.py` - Optimization analysis (uses BacktestAnalyzer)
-- ✅ `convert_telegram_signals.py` - Signal format converter
 - ✅ `fix_symbols.py` - Data cleaning utility
 - ✅ `check_telegram_channel.py` - Telegram verification
 

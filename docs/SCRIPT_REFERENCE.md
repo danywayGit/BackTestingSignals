@@ -344,25 +344,6 @@ python compare_october_november.py
 
 ## Utility Scripts
 
-### convert_telegram_signals.py 🔄
-
-**Purpose**: Convert signal formats between different structures
-
-**Usage**:
-```bash
-python convert_telegram_signals.py
-```
-
-**What it does**:
-- Reads Telegram signal exports
-- Converts to standard backtest format
-- Normalizes symbol names
-- Validates data integrity
-
-**When to use**: When signal format needs conversion for backtesting
-
----
-
 ### fix_symbols.py 🔧
 
 **Purpose**: Fix and normalize cryptocurrency symbol names

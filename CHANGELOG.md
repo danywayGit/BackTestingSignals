@@ -80,7 +80,6 @@ All notable changes to the BackTesting Signals project are documented in this fi
   - Used by all 4 analysis scripts
 
 #### Utility Scripts
-- **`convert_telegram_signals.py`**: Signal format converter
 - **`fix_symbols.py`**: Symbol normalization utility
 - **`check_telegram_channel.py`**: Telegram channel verification
 
